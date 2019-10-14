@@ -20,7 +20,7 @@ Features:
 
 The directory structure that HAT expects is.. (of course you can just ammend the code to your own needs)
 
-/opt/wordlists/1GB-4GB/*
-/opt/wordlists/4GB+/*
-/opt/wordlists/english-words/*
-/opt/wordlists/merged_list/*
+/opt/wordlists/1GB-4GB/  
+/opt/wordlists/4GB+/  
+/opt/wordlists/english-words/  
+/opt/wordlists/merged_list/  
