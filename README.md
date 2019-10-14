@@ -2,6 +2,8 @@
 An Automated Hashcat Tool for common wordlists and rules to speed up the process of cracking hashes during engagements.
 HAT is simple a wrapper for Hashcat - https://hashcat.net and I take no credit for that superb tool.
 
+***Linux support only***  
+
 Supported Hashes:
 
 NTLMv2 (NTHASH) -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5 (Kerberoasting)
