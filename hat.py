@@ -1,34 +1,12 @@
 #!/usr/bin/python2.7
 '''
-#Creation Date - 05/12/2018
+#Release Date - 14/10/2019
 #Latest update - Pre-Release
 #Last Modified - 14/10/2019
 #Python Hashcat Automated Password Recovery
-#Version 0.43
-#Latest mod - N/A
+#Version 0.1
 #Currenty working in python 2.7
 #Update to python 3 (to do)
-#Added Functionality for Cewl Lists
-#Added an automated list for all scan types. Useful when leaving over night
-#Added Sorted in alphanumerical order of pot file 
-
-#Useful Full commands
-/opt/hashcat/hashcat -a 6 -m 5600 NetNTLMv2.hash -w 3 /opt/wordlists/english-words/english-words/words_first_letter_upper.txt '?a?a?a?a' -O --increment
-/opt/hashcat/hashcat -a 0 -m 5600 NetNTLMv2.hash -w 3 --potfile-path ./mchugh.pot -O /opt/wordlists/rockyou.txt -r /opt/hashcat/rules/password_cracking_rules/OneRuleToRuleThemAll.rule
-
-cat Responder-Session-MERIAN.log | grep -E '*Hash*' | cut -d ' ' -f 13 > /opt/hat-hashcat-automation-tool/hash_upload/merian-ntlm.txt
-OR better
-grep -a 'Hash' Responder-Session-ascot.log | cut -d " " -f 13 > /opt/hat-hashcat-automation-tool/hash_upload/ascot
-
-
-
-#Sorts the files from .format 3 into chronological order
-awk '!x[$0]++' /opt/hat-hashcat-automation-tool/l00t/ascot.pot.format3 | sort > /opt/hat-hashcat-automation-tool/l00t/ascot.pot.sorted
-
-
-This might be better
-awk '!x[$0]++' /opt/hat-hashcat-automation-tool/l00t/ascot.pot.format3 | sort > test
-
 '''
 
 
