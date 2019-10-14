@@ -796,7 +796,8 @@ def cewl_menu_18():
     #Left Side
     hc2 = [os.popen('which hashcat').read().strip() + '-a', '7', '-m', hash_type, hash_path_and_name, pot_file, '?a?a?a?a?a', single_wordlist, '-w', '3', '-O', '--increment']
     subprocess.call(hc2)
-    os.system('clear')                                                                                                                return
+    os.system('clear')
+    return
 
 
 #All Menus
