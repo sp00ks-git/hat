@@ -18,3 +18,9 @@ Features:
 * Rsmangler Integration for finding permutations of a specific word that the firm might be using. (includes incrementing various combinations on either side)
 
 
+The directory structure that HAT expects is.. (of course you can just ammend the code to your own needs)
+
+/opt/wordlists/1GB-4GB/*
+/opt/wordlists/4GB+/*
+/opt/wordlists/english-words/*
+/opt/wordlists/merged_list/*
