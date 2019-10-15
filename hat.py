@@ -78,7 +78,6 @@ awk = " awk '!x[$0]++' "
 
 #Declare Paths
 #First make the hat absolute path dynamic and go up one level to accomodate each related path
-cwd = os.chdir('../')
 hashcat_path = os.getcwd()
 #hashcat_path = "/opt/hat-hashcat-automation-tool/"
 #Set the wordlist directory to where you're wordlists are...
