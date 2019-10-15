@@ -79,7 +79,6 @@ awk = " awk '!x[$0]++' "
 #Declare Paths
 #First make the hat absolute path dynamic and go up one level to accomodate each related path
 hashcat_path = os.getcwd()
-#hashcat_path = "/opt/hat-hashcat-automation-tool/"
 #Set the wordlist directory to where you're wordlists are...
 wordlist_directory = "/opt/wordlists/"
 l00t_pot_dir = os.path.join(hashcat_path, 'l00t')
@@ -258,7 +257,7 @@ def hash_mode_menu():
             hash_type = '5600'
             return
         elif hm_answer == "3":
-            hash_type =  '500'
+            hash_type =  '0'
             return
         elif hm_answer == "4":
             hash_type = '1800'
@@ -1071,6 +1070,8 @@ def hash_from_file():
     except KeyError:
         os.system('clear')
         pass
+    except Exception:
+        os.system('clear')
     return
 
 
