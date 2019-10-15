@@ -211,17 +211,10 @@ def pot_function():
 
 #Hashcat Command Line Menu
 def hashcat_command_line_menu():
-    #global app
     global awk
-    #global sort
-    #global attack_mode_inc_left
-    #global attack_mode_inc_right
     os.system('clear')
-    #app = os.popen('which hashcat').read().strip()
-    #attack_mode_inc_right = '-a 6'
-    #attack_mode_inc_left = ' -a 7 '
     awk = " awk '!x[$0]++' " # dont remove, parsing through zsh causes issues
-    #sort = " | sort > " # probably same as above
+    
     
 
 #Hash Mode Selection Menu
@@ -257,7 +250,7 @@ def hash_mode_menu():
             hash_type = '5600'
             return
         elif hm_answer == "3":
-            hash_type =  '0'
+            hash_type = '0'
             return
         elif hm_answer == "4":
             hash_type = '1800'
@@ -283,9 +276,12 @@ def wordlist_walk():
                 abs_wordlist = (os.path.join(dirpath, wordlist_filename))
                 hc_cmd = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, abs_wordlist, '-w', '3', '-O']
                 subprocess.call(hc_cmd)
-                subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-                os.system('clear')
-                
+                if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+                    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+                    os.system('clear')
+                else:
+                    os.system('clear')
+                                    
 
 #Rule Set Walk
 def rule_set_walk():
@@ -295,8 +291,12 @@ def rule_set_walk():
             abs_rule_set = (os.path.join(root, filename))
             hc_cmd = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, '-w', '3', '-O', pot_file, single_wordlist, '-r', abs_rule_set]
             subprocess.call(hc_cmd)
-            subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-            os.system('clear')
+            if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+                subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+                os.system('clear')
+            else:
+                os.system('clear')
+
 
 
 #Single Wordlist
@@ -331,13 +331,21 @@ def hash_answer(): # Split out from single wordlist so that all rules and wordli
         subprocess.call(hc_cmd1)
         hc_cmd2 = [app, hash_type, '-a', '0', '--username', '--session', 'all', pot_file, '--show', '-o', pot_formatted, '--outfile-format', '3', hash_path_and_name]
         subprocess.call(hc_cmd2)
-        subprocess.call(awk + pot_formatted + sort + pot_sorted, shell=True)
+        if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+            subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+            os.system('clear')
+        else:
+            os.system('clear')
     elif hm_answer == "2": # Net-NTLMv2
         hc_cmd1 = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist,'-w', '3', '-O']
         subprocess.call(hc_cmd1)
         hc_cmd2 = [os.popen('which hashcat').read().strip(), '-m', hash_type, '--show', '-o', pot_formatted, '--outfile-format', '3', hash_path_and_name, pot_file, '--session', 'all']
         subprocess.call(hc_cmd2)
-        subprocess.call(awk + pot_formatted + sort + pot_sorted, shell=True)
+        if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+            subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+            os.system('clear')
+        else:
+            os.system('clear')
     elif hm_answer == "3": # MD5
         hc_cmd = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-w', '3', '-O']
         subprocess.call(hc_cmd)
@@ -366,46 +374,71 @@ def file_unique_menu():
 def hc_command_menu_5():
     hc = [os.popen('which hashcat').read().strip(), '-a', '6', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '?a?a?a?a', '-w', '3', '-O', '--increment']
     subprocess.call(hc)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-    os.system('clear')
-    
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2': 
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
+        
+        
 #Single list for menu 6 - Oxford Dictionary + Starting with UPPER Case + upto 3 ANY Characters on LEFT SIDE
 def hc_command_menu_6():
     hc = [os.popen('which hashcat').read().strip(), '-a', '7', '-m', hash_type, hash_path_and_name, pot_file, '?a?a?a?a', single_wordlist, '-w', '3', '-O', '--increment']
+    input(hc)
     subprocess.call(hc)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-    os.system('clear')
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
+
     
 #Hashcat Dictionary wordlist with rules - Oxford Dictionary Starting with UPPER Case + {upto 4 Numbers LEFT SIDE, upto 4 numbers RIGHT SIDE}
 def hc_command_menu_7():
     #Four Numbers (Left Side)
     hc1 = [os.popen('which hashcat').read().strip(), '-a', '7', '-m', hash_type, hash_path_and_name, pot_file, '?d?d?d?d', single_wordlist, '-w', '3', '-O', '--increment']
     subprocess.call(hc1)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
     #Four Numbers (Right Side)
     hc2 = [os.popen('which hashcat').read().strip(), '-a', '6', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '?d?d?d?d', '-w', '3', '-O', '--increment']
     subprocess.call(hc2)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
     os.system('clear')
 
-#Rule set Directory 11 # L33t speak rules (leetspeak.rule + unix-ninja-leetspeak.rule)               
+#Rule set Directory 11 - L33t speak rules (leetspeak.rule + unix-ninja-leetspeak.rule)               
 def hc_command_menu_11():
     hash_answer()
     hc1 = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-r', os.path.join(rules_dir, 'leetspeak.rule'), '-w', '3', '-O']
+    input(hc1)
     subprocess.call(hc1)
     hc2 = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-r', os.path.join(rules_dir, 'unix-ninja-leetspeak.rule'), '-w', '3', '-O']
     subprocess.call(hc2)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-    os.system('clear')
+    input(hc2)
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
     
-#Hashcat with Rule Sets                                                                               
+#Hashcat with Rule Sets
 def singular_wordlist_rule_set():
     global hash_type
     hash_answer()
     hc = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-r', rule_set_directory, '-w', '3', '-O']
     subprocess.call(hc)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-    os.system('clear')
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
 
 #Rsmangler Rule Set - {5 ANY Characters RIGHT --> LEFT incremental}                                                                                                        
 def rsmangler_rule_set():
@@ -415,12 +448,19 @@ def rsmangler_rule_set():
     #Right Side                                                                                                                                                            
     hc1 = [os.popen('which hashcat').read().strip(), attack_mode_inc_right, hash_type, hash_path_and_name, pot_file, single_wordlist, '?a?a?a?a', '-w', '3', '-O', '--increment']
     subprocess.call(hc1)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-    #Left Side                                                                                                                                                             
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
+    #LeftSide
     hc2 = [os.popen('which hashcat').read().strip(), attack_mode_inc_left, '-m', hash_type, hash_path_and_name, pot_file, '?a?a?a?a', single_wordlist, '-w', '3', '-O', '--increment']
     subprocess.call(hc2)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-    os.system('clear')
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
 
 #Crack Menu 0 - Try all words lists merged List -  Common Credentials
 #Updated and merged all smaller wordlists into one file for more effcient testing (find . -name "*.txt" | xarg cat >> ./mergedfile.txt)                                                                     
@@ -665,11 +705,18 @@ def crack_menu_14():
     hashcat_command_line_menu()
     hc1 = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-r', os.path.join(rules_dir, 'hob064.rule'), '-w', '3', '-O']
     subprocess.call(hc1)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
     hc2 = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-r', os.path.join(rules_dir, 'd3adhob0.rule'), '-w', '3', '-O']
     subprocess.call(hc2)
-    subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-    os.system('clear')
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
     return
 
 #Crack Menu 15 - Auto Multi Rule Test - Iterate through each rule with rockyou.txt - {Corporate Scan}
@@ -889,6 +936,7 @@ def crack_menu():
     global cewl_wordlist_size
     global l00t_pot_dir
     global hash_input
+    wordlist_directory = "/opt/wordlists/" # Added to re-establish the base directory.
     os.system('clear')
     try:
         while 1:
@@ -1102,3 +1150,5 @@ def main_menu():
 
 if __name__ == '__main__':
     main_menu()
+
+    
