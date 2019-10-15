@@ -28,8 +28,10 @@ The directory structure that HAT expects is.. (of course you can just ammend the
 /opt/wordlists/merged_list/  
 
 
-Suggested Wordlists download links- working as of 14/10/2019  
-https://github.com/dwyl/english-words/blob/master/words.txt (~466,000 words)  
+Suggested Wordlists download links (HTTP) - working as of 14/10/2019   
+https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt (~14,300,000 words)  
+https://github.com/dwyl/english-words/blob/master/words.txt (~466,000 words)
+https://crackstation.net/files/crackstation-human-only.txt.gz (4.2 GB)
 https://download.g0tmi1k.com/wordlists/large/10-million-combos.zip (8.8 GB)  
 https://download.g0tmi1k.com/wordlists/large/36.4GB-18_in_1.lst.7z (48.4 GB)  
 https://download.g0tmi1k.com/wordlists/large/b0n3z-wordlist-sorted-something.tar.gz (165 GB)  
