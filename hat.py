@@ -384,7 +384,6 @@ def hc_command_menu_5():
 #Single list for menu 6 - Oxford Dictionary + Starting with UPPER Case + upto 3 ANY Characters on LEFT SIDE
 def hc_command_menu_6():
     hc = [os.popen('which hashcat').read().strip(), '-a', '7', '-m', hash_type, hash_path_and_name, pot_file, '?a?a?a?a', single_wordlist, '-w', '3', '-O', '--increment']
-    input(hc)
     subprocess.call(hc)
     if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
         subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
@@ -417,11 +416,9 @@ def hc_command_menu_7():
 def hc_command_menu_11():
     hash_answer()
     hc1 = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-r', os.path.join(rules_dir, 'leetspeak.rule'), '-w', '3', '-O']
-    input(hc1)
     subprocess.call(hc1)
     hc2 = [os.popen('which hashcat').read().strip(), '-a', '0', '-m', hash_type, hash_path_and_name, pot_file, single_wordlist, '-r', os.path.join(rules_dir, 'unix-ninja-leetspeak.rule'), '-w', '3', '-O']
     subprocess.call(hc2)
-    input(hc2)
     if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
         subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
         os.system('clear')
