@@ -136,6 +136,7 @@ def pot_function():
         pot_boolean = True
         return
     elif single_hash_boolean == True and pot_boolean == False:
+        pot = hash_input.lower()
         pot = single_hash_file_name.lower()
         pot = pot + '.pot' #No need to create a file here as hashcat will automajically make one and therefore we will have duplicates
         hash_path_and_name = os.path.join(os.getcwd(), single_hash_file_name)
@@ -154,7 +155,7 @@ def pot_function():
         pot_boolean = True
         return
     elif file_hash_boolean == True and pot_boolean == False and hm_answer == "1": # Net-NTLMv1 
-        pot = hash_input.lower()                                              
+        pot = hash_input.lower()
         pot = pot + '.pot'                                                    
         pot_sorted = os.path.join(l00t_pot_dir, pot) + '.sorted '             
         hash_path_and_name = hash_abs_path                                    
@@ -267,23 +268,17 @@ def hash_mode_menu():
 
 #Straight Wordlist_walk
 def wordlist_walk():
-    exten = ''
     for dirpath, dirnames, files in os.walk(wordlist_directory):
         for wordlist_filename in files:
-            if wordlist_filename.endswith(exten):
-                abs_wordlist = (os.path.join(dirpath, wordlist_filename))
-                hc_cmd = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, abs_wordlist, '-w', '3', '-O']
-                input(hc_cmd)
-                subprocess.call(hc_cmd)
-    wordlist_directory = '/opt/wordlists/'
+            abs_wordlist = (os.path.join(dirpath, wordlist_filename))
+            hc_cmd = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, abs_wordlist, '-w', '3', '-O']
+            subprocess.call(hc_cmd)
     if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
         subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
         os.system('clear')
     else:
         os.system('clear')
-    #wordlist_directory = '/opt/wordlists/'
-    #single_wordlist = '/opt/wordlists/'
-
+    
 #Rule Set Walk
 def rule_set_walk():
     exten = '*.rule'
@@ -292,11 +287,11 @@ def rule_set_walk():
             abs_rule_set = (os.path.join(root, filename))
             hc_cmd = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, '-w', '3', '-O', pot_file, single_wordlist, '-r', abs_rule_set]
             subprocess.call(hc_cmd)
-            if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
-                subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
-                os.system('clear')
-            else:
-                os.system('clear')
+    if hm_answer == '0' or hm_answer == '1' or hm_answer  == '2':
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
+        os.system('clear')
+    else:
+        os.system('clear')
                 
 #Single Wordlist
 def singular_wordlist():
@@ -319,11 +314,8 @@ def singular_wordlist():
     os.system('clear')
     return
 
-def hash_answer(): # Split out from single wordlist so that all rules and wordlists can use this function block
-    #global wordlist_directory
-    wordlist_directory = '/opt/wordlists/'
-    input(wordlist_directory)
-    input('hm_answer ' + ' = ' + hm_answer)
+def hash_answer(): # Split out from single wordlist so that all rules and wordlists can use this function block.
+    wordlist_directory = '/opt/wordlists/' # needed to rset the wordlist directory.
     if hm_answer == "0": # NTHASH
         hc_cmd1 = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist, '-w 3', '-O']
         subprocess.call(hc_cmd1)
@@ -343,7 +335,6 @@ def hash_answer(): # Split out from single wordlist so that all rules and wordli
         subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
     elif hm_answer == "3": # MD5
         hc_cmd = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, os.path.join(wordlist_directory, '4GB+/crackstation.txt'), '-w', '3', '-O']
-        input(hc_cmd)
         subprocess.call(hc_cmd)
     elif hm_answer == "4": # SHA-512
         hc_cmd = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist, '-w', '3', '-O']
@@ -352,9 +343,7 @@ def hash_answer(): # Split out from single wordlist so that all rules and wordli
         hc_cmd = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist,'-w', '3', '-O']
         subprocess.call(hc_cmd)
     else:
-        input('return')
         return
-    input('return1')
     os.system('clear')
     return
 
@@ -414,15 +403,14 @@ def crack_menu_0():
     global file_hash_boolean
     global pot_boolean
     global single_wordlist
-    #wordlist_directory = '/opt/wordlists'
-    input('crack_menu_0() ' + wordlist_directory)
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory. 
     if cewl_boolean == True and file_hash_boolean == True:
         single_wordlist = default_cewl_file_output
     elif single_hash_boolean == True and cewl_boolean == True:
         single_wordlist = default_cewl_file_output
     else:
         single_wordlist = os.path.join(wordlist_directory, 'merged_list/sp00ks_merged_file_uniq.txt')
-        input('stop 1 ' + single_wordlist)
+        #input('stop 1 ' + single_wordlist)
     if all_menu == True:
         pot_function()
         hashcat_command_line_menu()
@@ -443,7 +431,7 @@ def crack_menu_0():
         hc = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist, '-w', '3', '-O']
         subprocess.call(hc)
     else:
-        input('pre hash_answer()')
+        #input('pre hash_answer()')
         hash_answer()
         os.system('clear')
 
@@ -451,7 +439,7 @@ def crack_menu_0():
 #Crack Menu 1 - Try all words lists between 1GB < 4GB                  
 def crack_menu_1():
     global wordlist_directory
-    wordlist_directory = '/opt/wordlists'
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     wordlist_directory = os.path.join(wordlist_directory, '1GB-4GB')
     if all_menu == True:
         pot_function()
@@ -469,6 +457,7 @@ def crack_menu_1():
 
 #Crack Menu 2 - Try crackstation list (15GB)
 def crack_menu_2():
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     single_wordlist = os.path.join(wordlist_directory, '4GB+/crackstation.txt')
     if all_menu == True:
         pot_function()
@@ -498,6 +487,7 @@ def crack_menu_2():
 
 #Crack_Menu 3
 def crack_menu_3():
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     single_wordlist = os.path.join(wordlist_directory, '4GB+/weakpass_2p')
     if all_menu == True:
         pot_function()
@@ -528,7 +518,7 @@ def crack_menu_3():
 
 #Crack Menu 4 - Try all words lists 4GB+ - (will take a while to cache each wordlist prior to testing)
 def crack_menu_4():
-    global wordlist_directory
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     wordlist_directory = os.path.join(wordlist_directory, '4GB+')
     if all_menu == True:
         pot_function()
@@ -546,6 +536,7 @@ def crack_menu_4():
 
 #Crack Menu 5 - Oxford Dic, capital letter, upto 4 characters, incrementally - RIGHT SIDE 
 def crack_menu_5():
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     single_wordlist = os.path.join(wordlist_directory, 'english-words/words.txt')
     if all_menu == True:
         pot_function()
@@ -568,6 +559,7 @@ def crack_menu_5():
 
 #Crack Menu 6 - Oxford Dic, capital letter, upto 4 characters, incrementally - LEFT SIDE           
 def crack_menu_6():
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     single_wordlist = os.path.join(wordlist_directory, 'english-words/words_first_letter_upper.txt')
     if all_menu == True:
         pot_function()
@@ -590,6 +582,7 @@ def crack_menu_6():
 
 #Crack Menu 7 - Try Oxford Dictionary Starting with UPPER Case + {upto 4 Numbers LEFT SIDE, upto 4 numbers RIGHT SIDE}
 def crack_menu_7():
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     single_wordlist = os.path.join(wordlist_directory, 'english-words/words_first_letter_upper.txt')
     if all_menu == True:
         pot_function()
@@ -621,6 +614,7 @@ def crack_menu_7():
 
 #Crack Menu 8 - Automated Testing - Oxford Dictionary MIXED CASE + upto 3 ANY Characters on RIGHT SIDE - {Corporate Scan}
 def crack_menu_8():
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     single_wordlist = os.path.join(wordlist_directory, 'english-words/words.txt')
     if all_menu == True:
         pot_function()
@@ -643,7 +637,6 @@ def crack_menu_8():
 
 #Crack Menu 9 - Rockyou with rule - d3ad0ne                                                        
 def crack_menu_9():
-    #global single_wordlist
     global single_hash_boolean
     global file_hash_boolean
     global rule_set_directory
@@ -673,7 +666,6 @@ def crack_menu_9():
 
 #Crack Menu 10 - Rockyou with rule - OneRuleToRuleThemAll
 def crack_menu_10():
-    #global single_wordlist
     global single_hash_boolean
     global file_hash_boolean
     global rule_set_directory
@@ -695,7 +687,6 @@ def crack_menu_10():
         pot_function()
         hashcat_command_line_menu()
         os.system('clear')
-    #singular_wordlist_rule_set()
     hash_answer()
     hc = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist, '-r', rule_set_directory, '-w', '3', '-O']
     subprocess.call(hc)
@@ -766,7 +757,6 @@ def crack_menu_12():
 
 #Crack Menu 13 - Rockyou with rule - rockyou-30000
 def crack_menu_13():
-    #global single_wordlist
     global single_hash_boolean
     global file_hash_boolean
     global rule_set_directory
@@ -796,7 +786,7 @@ def crack_menu_13():
 
 #Crack Menu 14 - Rockyou with Hob0Rules -> Quick Test {hob064.rule} -> Comprenensive Test {d3adhob0.rule}
 def crack_menu_14():
-    #global single_wordlist
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     global single_hash_boolean
     global file_hash_boolean
     global rule_set_directory
@@ -835,6 +825,7 @@ def crack_menu_14():
 
 #Crack Menu 15 - Auto Multi Rule Test - Iterate through each rule with rockyou.txt - {Corporate Scan}
 def crack_menu_15():
+    wordlist_directory = '/opt/wordlists' # Needed to reset the wordlist directory.
     global single_wordlist
     global default_cewl_file_output
     global hash_abs_path
@@ -974,6 +965,7 @@ def increment_menu():
     global wordlist_walk
     global wordlist_directory
     all_menu = True
+    wordlist_directory = '/opt/wordlists'
     os.system('clear')
     banner()
     hash_mode_menu()
