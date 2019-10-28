@@ -146,7 +146,7 @@ def pot_function():
     elif file_hash_boolean == True and pot_boolean == False and hm_answer == "0": # NT HASH
         pot = hash_input.lower()
         pot = pot + '.pot'
-        pot_format_extension = pot + '.format3 '
+        pot_format_extension = pot + '.format3'
         pot_sorted = os.path.join(l00t_pot_dir, pot) + '.sorted '
         hash_path_and_name = hash_abs_path
         pot_file = '--potfile-path=' + os.path.join(l00t_pot_dir, pot)
@@ -165,7 +165,7 @@ def pot_function():
     elif file_hash_boolean == True and pot_boolean == False and hm_answer == "2": # Net-NTLMv2
         pot = hash_input.lower()
         pot = pot + '.pot'
-        pot_format_extension = pot + '.format3 '
+        pot_format_extension = pot + '.format3'
         pot_sorted = os.path.join(l00t_pot_dir, pot) + '.sorted '
         hash_path_and_name = hash_abs_path
         pot_file = '--potfile-path=' + os.path.join(l00t_pot_dir, pot)
@@ -176,7 +176,7 @@ def pot_function():
     elif file_hash_boolean == True and pot_boolean == False and hm_answer == "3": # MD5
         pot = hash_input.lower()
         pot = pot + '.pot'
-        pot_format_extension = pot + '.format3 '
+        pot_format_extension = pot + '.format3'
         pot_sorted = os.path.join(l00t_pot_dir, pot) + '.sorted '
         #hash_path_and_name = hash_abs_path
         pot_file = '--potfile-path=' + os.path.join(l00t_pot_dir, pot)
@@ -186,7 +186,7 @@ def pot_function():
     elif file_hash_boolean == True and pot_boolean == False and hm_answer == "4": # SHA-512
         pot = hash_input.lower()
         pot = pot + '.pot'
-        pot_format_extension = pot + '.format3 '
+        pot_format_extension = pot + '.format3'
         pot_sorted = os.path.join(l00t_pot_dir, pot) + '.sorted '
         hash_path_and_name = hash_abs_path
         pot_file = '--potfile-path=' + os.path.join(l00t_pot_dir, pot)
@@ -317,10 +317,12 @@ def singular_wordlist():
 def hash_answer(): # Split out from single wordlist so that all rules and wordlists can use this function block.
     wordlist_directory = '/opt/wordlists/' # needed to rset the wordlist directory.
     if hm_answer == "0": # NTHASH
-        hc_cmd1 = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist, '-w 3', '-O']
+        hc_cmd1 = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist, '-w', '3', '-O']
         subprocess.call(hc_cmd1)
         hc_cmd2 = ['hashcat', '-m', hash_type, '-a', '0', '--username', '--session', 'all', pot_file, '--show', '-o', pot_formatted, '--outfile-format', '3', hash_abs_path]
+        input(hc_cmd2)
         subprocess.call(hc_cmd2)
+        subprocess.call(awk + pot_formatted + " | sort > " + pot_sorted, shell=True)
     elif hm_answer == "1": # Net-NTLMv1
         hc_cmd1 = ['hashcat', '-a', '0', '-m', hash_type, hash_abs_path, pot_file, single_wordlist, '-w', '3', '-O']
         subprocess.call(hc_cmd1)
