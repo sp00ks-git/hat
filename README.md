@@ -1,4 +1,4 @@
-# HAT- The Hashcat Automation Tool
+# HAT - The Hashcat Automation Tool
 An automated Hashcat tool for common wordlists and rules to speed up the process of cracking hashes during engagements.
 HAT is simple a wrapper for Hashcat (with a few extra features) - https://hashcat.net, however I take no credit for that superb tool.
 
