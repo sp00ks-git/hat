@@ -33,7 +33,7 @@ The directory structure that HAT expects is.. (of course you can just ammend the
 Suggested Wordlists download links (HTTP) - working as of 14/10/2019   
 * https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt (~14,300,000 words)  
 * https://github.com/dwyl/english-words/blob/master/words.txt (~466,000 words)  
-* https://download.g0tmi1k.com/wordlists/large/sp00ks_merged_file_uniq.7z (2.7GB - Compressed)  
+* https://download.g0tmi1k.com/wordlists/large/sp00ks_merged_file_uniq.7z (2.7 GB - Compressed)  
 * https://srv-file4.gofile.io/download/NHXEGm/sp00ks_merged_file_uniq.7z (8.2 GB - mirror)  
 * https://crackstation.net/files/crackstation-human-only.txt.gz (4.2 GB)  
 * https://download.g0tmi1k.com/wordlists/large/crackstation.txt.gz (4.5 GB)  
