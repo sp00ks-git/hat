@@ -22,21 +22,23 @@ Features:
 
 The directory structure that HAT expects is.. (of course you can just ammend the code to your own needs)
 
-/opt/worliststs/rockyou.txt  
-/opt/wordlists/1GB-4GB/  
-/opt/wordlists/4GB+/  
-/opt/wordlists/english-words/  
-/opt/wordlists/merged_list/
+-> /opt/worliststs/rockyou.txt  
+-> /opt/wordlists/1GB-4GB/  
+-> /opt/wordlists/4GB+/  
+-> /opt/wordlists/english-words/  
+-> /opt/wordlists/merged_list/
 
 
 
 Suggested Wordlists download links (HTTP) - working as of 14/10/2019   
-https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt (~14,300,000 words)  
-https://github.com/dwyl/english-words/blob/master/words.txt (~466,000 words)
-https://download.g0tmi1k.com/wordlists/large/sp00ks_merged_file_uniq.7z (2.7GB - Compressed)  
-https://srv-file4.gofile.io/download/NHXEGm/sp00ks_merged_file_uniq.7z (8.2 GB - mirror)      
-https://crackstation.net/files/crackstation-human-only.txt.gz (4.2 GB)  
-https://download.g0tmi1k.com/wordlists/large/10-million-combos.zip (8.8 GB)  
-https://download.g0tmi1k.com/wordlists/large/36.4GB-18_in_1.lst.7z (48.4 GB)  
-https://download.g0tmi1k.com/wordlists/large/b0n3z-wordlist-sorted-something.tar.gz (165 GB)  
-https://download.g0tmi1k.com/wordlists/large/crackstation.txt.gz (4.5 GB)  
+* https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt (~14,300,000 words)  
+* https://github.com/dwyl/english-words/blob/master/words.txt (~466,000 words) 
+* http://storage.aircrack-ng.org/users/PsycO/PsycOPacKv2.rar (1.4GB)  
+* https://download.g0tmi1k.com/wordlists/large/sp00ks_merged_file_uniq.7z (2.7 GB - Compressed)  
+* https://srv-file4.gofile.io/download/NHXEGm/sp00ks_merged_file_uniq.7z (8.2 GB - mirror)  
+* https://crackstation.net/files/crackstation-human-only.txt.gz (4.2 GB)  
+* https://download.g0tmi1k.com/wordlists/large/crackstation.txt.gz (4.5 GB)  
+* https://download.g0tmi1k.com/wordlists/large/10-million-combos.zip (8.8 GB)  
+* https://download.g0tmi1k.com/wordlists/large/36.4GB-18_in_1.lst.7z (48.4 GB)  
+* https://download.g0tmi1k.com/wordlists/large/b0n3z-wordlist-sorted-something.tar.gz (165 GB)  
+* http://download1568.mediafire.com/yuh4jmehecwg/8oazhwqzexid771/WordlistBySheez_v8.7z (166.17 GB)  
