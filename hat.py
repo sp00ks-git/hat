@@ -1,10 +1,10 @@
 #!/usr/bin/python2.7
 '''
-#Release Date - 14/11/2019
-#Latest update - Release
-#Last Modified - 14/11/2019
+#Release Date - 14/10/2019
+#Latest update - Pre-Release
+#Last Modified - 14/10/2019
 #Python Hashcat Automated Password Recovery
-#Version 1.1
+#Version 1.0
 #Currenty working in python 2.7
 #Update to python 3 (to do)
 '''
@@ -943,23 +943,25 @@ def crack_menu():
                 print'\t\t\t\t\t' + '\033[40m' + '--==Multi Hash Cracking Menu==--' + '\033[0m'
                 print""
                 print""
-                print" " + "Hash File Loaded: ",
+                print" " + "Hash File Loaded:  ",
                 prYellow(HASH_ABS_PATH)
-                print" " + "Hashes Loaded:    ",
+                print" " + "Hashes Loaded:     ",
                 prRed(HASHES_LOADED)
-                print" " + "Hashes Cracked:   ",
+                print" " + "Hashes Cracked:    ",
                 POT = HASH_INPUT.lower()
                 POT = POT + '.pot'
                 pot_absolute = os.path.join(L00T_POT_DIR, POT)
                 if os.path.exists(pot_absolute):
                     with open(pot_absolute) as lines:
                         hashes_cracked = len(lines.readlines())
-                        prGreen(hashes_cracked)
+                        print' ' + '\033[92m' + str(hashes_cracked) + '\033[0m'
+                        print' ' + 'Percentage Cracked:',
+                        percent_cracked = (hashes_cracked * 100 / HASHES_LOADED)
+                        print' ' + '\033[34m' + str(percent_cracked) + ('%') + '\033[0m'
                 else:
                     prRed("0")
-                print" " + "Percentage Cracked:",
-                percent_cracked = (hashes_cracked * 100 / HASHES_LOADED)
-                print'\033[34m' + str(percent_cracked) + ('%') + '\033[0m'
+                    print' ' + 'Percentage Cracked:',
+                    print'\033[34m' + ' ' + str(0) + ('%') + '\033[0m'
             elif FILE_HASH_BOOLEAN and CEWL_BOOLEAN:
                 banner() # Added after the call as still in the loop for aesthtics.
                 print""
