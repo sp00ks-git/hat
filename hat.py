@@ -1075,7 +1075,7 @@ def hash_from_file():
     print'\033[33m' + ' ' + 'Add hash files into the hash upload directory shown below:' + '\033[0m'
     prCyan(HASH_UPLOAD_DIR)
     print""
-    print'\033[34m' + ' ' + 'Below are the files currently available in the hash upload directory.. (Hit Enter to Refresh)' + '\033[0m'
+    print'\033[34m' + ' ' + 'Below are the files currently available in the hash upload directory.. (Hit Enter to Refresh) Press for Tab Completion' + '\033[0m'
     print""
     #Used for removing emacs created backup files ending with a tilde
     ignore = '~'
