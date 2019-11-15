@@ -12,6 +12,7 @@
 #Module Imports
 import fnmatch
 import os
+import readline
 import subprocess
 import sys
 
@@ -1085,8 +1086,9 @@ def hash_from_file():
                 print" \t" + os.path.join(f)
     print""
     print'\033[33m' + ' ' + 'Select the filename from the above list to be uploaded:' + '\033[0m'
+    os.chdir(HASH_UPLOAD_DIR)               
+    readline.parse_and_bind("tab: complete")
     HASH_INPUT = raw_input("------> ")
-    os.chdir(HASH_UPLOAD_DIR)
     try:
         if os.path.isfile(HASH_INPUT):
             print" Hash File %s found and accepted..." % HASH_INPUT
