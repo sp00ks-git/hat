@@ -16,6 +16,7 @@ import readline
 import subprocess
 import sys
 
+
 #Define Colours
 def prRed(prt):
     print"\033[91m {}\033[00m" .format(prt)
@@ -234,6 +235,7 @@ def rsmangler_rule_set():
 
 #Crack Menu 0 - Try all words lists merged List -  Common Credentials
 #Updated and merged all smaller wordlists into one file for more effcient testing
+#Added ruleset to add iterations to the based wordset
 #(find . -name "*.txt" | xarg cat >> ./mergedfile.txt)
 def crack_menu_0():
     global DEFAULT_CEWL_FILE_OUTPUT
@@ -251,7 +253,7 @@ def crack_menu_0():
     else:
         hash_mode_menu()
         pot_function()
-    hc_cmd1 = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-w', '3', '-O']
+    hc_cmd1 = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'OneRuleToRuleThemAll.rule'), '-w', '3', '-O']
     subprocess.call(hc_cmd1)
     if HM_ANSWER == '0' or HM_ANSWER == '1':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
@@ -975,7 +977,7 @@ def crack_menu():
                 print" " + "Amount of Cewl words written + Absolute Path: "
                 prYellow(CEWL_WORDLIST_SIZE)
             print""
-            print' ' + '\033[44m' + 'Supported - NTLMv2 (NTHASH) -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5 (Kerberoasting)' + '\033[0m'
+            print' ' + '\033[44m' + 'Supported - NTLMv2 (NTHASH) -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5' + '\033[0m'
             print""
             prCyan("0) A single merged list of wordlists in the public domain")
             prLightPurple("1) Common Wordlists - includes rockyou, hashkiller")
@@ -1075,7 +1077,7 @@ def hash_from_file():
     print'\033[33m' + ' ' + 'Add hash files into the hash upload directory shown below:' + '\033[0m'
     prCyan(HASH_UPLOAD_DIR)
     print""
-    print'\033[34m' + ' ' + 'Below are the files currently available in the hash upload directory.. (Hit Enter to Refresh) Press for Tab Completion' + '\033[0m'
+    print'\033[34m' + ' ' + 'Below are the files in the hash upload directory.. (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
     print""
     #Used for removing emacs created backup files ending with a tilde
     ignore = '~'
@@ -1086,7 +1088,7 @@ def hash_from_file():
                 print" \t" + os.path.join(f)
     print""
     print'\033[33m' + ' ' + 'Select the filename from the above list to be uploaded:' + '\033[0m'
-    os.chdir(HASH_UPLOAD_DIR)               
+    os.chdir(HASH_UPLOAD_DIR)
     readline.parse_and_bind("tab: complete")
     HASH_INPUT = raw_input("------> ")
     try:
