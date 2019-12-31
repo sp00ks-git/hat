@@ -87,7 +87,7 @@ AWK = " " + "awk '!x[$0]++'" + " "
 #First make the hat absolute path dynamic and go up one level to accomodate each related path
 HASHCAT_PATH = os.getcwd()
 #Set the wordlist directory to where you're wordlists are...
-WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists"
+WORDLIST_DIRECTORY = "/opt/wordlists"
 L00T_POT_DIR = os.path.join(HASHCAT_PATH, 'l00t')
 RULES_DIR = os.path.join(HASHCAT_PATH, 'rules')
 STATS_DIR = os.path.join(HASHCAT_PATH, 'stats')
@@ -280,7 +280,7 @@ def crack_menu_0():
     global SINGLE_WORDLIST
     global WIRELESS_BOOLEAN
     global HASH_PATH_AND_NAME
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" #Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" #Needed to reset the wordlist directory.
     if ALL_MENU:
         pot_function()
     else:
@@ -315,7 +315,7 @@ def crack_menu_0():
 #Crack Menu 1 - Try all words lists between 1GB < 4GB
 def crack_menu_1():
     global WORDLIST_DIRECTORY
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     WORDLIST_DIRECTORY = os.path.join(WORDLIST_DIRECTORY, '1GB-4GB')
     if ALL_MENU:
         pot_function()
@@ -332,7 +332,7 @@ def crack_menu_1():
 #Crack Menu 2 - Try crackstation list (15GB)
 def crack_menu_2():
     global HASH_PATH_AND_NAME
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     if ALL_MENU:
         pot_function()
     else:
@@ -367,7 +367,7 @@ def crack_menu_2():
 #Crack_Menu 3
 def crack_menu_3():
     global HASH_PATH_AND_NAME
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     if ALL_MENU:
         pot_function()
     else:
@@ -400,7 +400,7 @@ def crack_menu_3():
 #Crack Menu 4 - Try all words lists 4GB+ - (will take a while to cache each wordlist prior to testing)
 def crack_menu_4():
     global WORDLIST_DIRECTORY
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     WORDLIST_DIRECTORY = os.path.join(WORDLIST_DIRECTORY, '4GB+')
     if ALL_MENU:
         pot_function()
@@ -416,7 +416,7 @@ def crack_menu_4():
 
 #Crack Menu 5 - Oxford Dic, capital letter, upto 4 characters, incrementally - RIGHT SIDE
 def crack_menu_5():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     SINGLE_WORDLIST = os.path.join(WORDLIST_DIRECTORY, 'english-words/words.txt')
     if ALL_MENU:
         pot_function()
@@ -444,7 +444,7 @@ def crack_menu_5():
 
 #Crack Menu 6 - Oxford Dic, capital letter, upto 4 characters, incrementally - LEFT SIDE
 def crack_menu_6():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     SINGLE_WORDLIST = os.path.join(WORDLIST_DIRECTORY, 'english-words/words_first_letter_upper.txt')
     if ALL_MENU:
         pot_function()
@@ -471,7 +471,7 @@ def crack_menu_6():
 
 #Crack Menu 7 - Try Oxford Dictionary Starting with UPPER Case + {upto 4 Numbers LEFT SIDE, upto 4 numbers RIGHT SIDE}
 def crack_menu_7():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     SINGLE_WORDLIST = os.path.join(WORDLIST_DIRECTORY, 'english-words/words_first_letter_upper.txt')
     if ALL_MENU:
         pot_function()
@@ -510,7 +510,7 @@ def crack_menu_7():
 
 #Crack Menu 8 - Automated Testing - Oxford Dictionary MIXED CASE + upto 3 ANY Characters on RIGHT SIDE - {Corporate Scan}
 def crack_menu_8():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     SINGLE_WORDLIST = os.path.join(WORDLIST_DIRECTORY, 'english-words/words.txt')
     if ALL_MENU:
         pot_function()
@@ -537,7 +537,7 @@ def crack_menu_8():
 
 #Crack Menu 9 - Rockyou with rule - d3ad0ne
 def crack_menu_9():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_PATH_AND_NAME
     global SINGLE_HASH_BOOLEAN
@@ -575,7 +575,7 @@ def crack_menu_9():
 
 #Crack Menu 10 - Rockyou with rule - OneRuleToRuleThemAll
 def crack_menu_10():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global SINGLE_HASH_BOOLEAN
     global FILE_HASH_BOOLEAN
     global HASH_PATH_AND_NAME
@@ -612,7 +612,7 @@ def crack_menu_10():
 
 #Crack Menu 11 - Rockyou with rule - # Changed to add leet speak rules
 def crack_menu_11():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_PATH_AND_NAME
     if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
@@ -649,7 +649,7 @@ def crack_menu_11():
 
 #Crack Menu 12 - Rockastic with OneRuleToRuleThemAll
 def crack_menu_12():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global DEFAULT_CEWL_FILE_OUTPUT
     global FILE_HASH_BOOLEAN
     global HASH_PATH_AND_NAME
@@ -685,7 +685,7 @@ def crack_menu_12():
 
 #Crack Menu 13 - Rocktastic with dive rule
 def crack_menu_13():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_PATH_AND_NAME
     global SINGLE_HASH_BOOLEAN
@@ -723,7 +723,7 @@ def crack_menu_13():
 
 #Crack Menu 14 - Rocktastic with Hob0Rules -> Quick {hob064.rule} -> Comprenensive Test {d3adhob0.rule}
 def crack_menu_14():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global SINGLE_HASH_BOOLEAN
     global FILE_HASH_BOOLEAN
     global HASH_PATH_AND_NAME
@@ -768,7 +768,7 @@ def crack_menu_14():
 
 #Crack Menu 15 - Auto Multi Rule Test - Iterate through each rule with rockyou.txt - {Corporate Scan}
 def crack_menu_15():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists" # Needed to reset the wordlist directory.
+    WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global SINGLE_WORDLIST
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_ABS_PATH
@@ -962,7 +962,7 @@ def increment_menu():
     global ALL_MENU
     global WORDLIST_DIRECTORY
     ALL_MENU = True
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists"
+    WORDLIST_DIRECTORY = "/opt/wordlists"
     banner()
     hash_mode_menu()
     pot_function()
@@ -985,7 +985,7 @@ def increment_menu():
 
 #Passphrase testing Menu
 def passphrase_menu():
-    WORDLIST_DIRECTORY = "/mnt/storage-2TB/wordlists"
+    WORDLIST_DIRECTORY = "/opt/wordlists"
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_ABS_PATH
     if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
