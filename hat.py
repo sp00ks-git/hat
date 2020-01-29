@@ -11,10 +11,13 @@
 '''
 
 #Module Imports
+import csv
 import fnmatch
 import os
+import pprint as pp
 import readline
 import subprocess
+#from subprocess import Popen, PIPE
 import sys
 import time
 
@@ -82,6 +85,9 @@ os.system('clear')
 
 #AWK command - AWKward command that doesn't sit well when called idrectly.
 AWK = " " + "awk '!x[$0]++'" + " "
+
+#HM_ANSWER set to '999' - Used if not declared for the stats menu.
+HM_ANSWER = "999"
 
 #Declare Paths
 #First make the hat absolute path dynamic and go up one level to accomodate each related path
@@ -168,8 +174,10 @@ def hash_mode_menu():
             prLightPurple("\t(5) Kerberos 5 TGS-REP etype 23 - Kerberoasting Format")
             prGreen("\t\tRC4-HMAC-MD5 Example - $krb5tgs$23$*user$realm$test/spn*$b548eb06bae0eead3b7f639178a90cf24d9a1<snip>")
             prCyan("\t(6) AS-REP ROASTING - Kerberos 5 AS-REP etype 23")
-            prGreen("\t\tExample - HASH: $krb5asrep$23$user@domain.com:3e156ada591263b8aab0965f5aebd837$007497cb51b6c81<snip>")
-            prRed("\t(7) Back")
+            prGreen("\t\tAS-REP23 Example - HASH: $krb5asrep$23$user@domain.com:3e156ada591263b8aab0965f5aebd837$007497cb51b6c81<snip>")
+            prLightPurple("\t(7) WPA-EAPOL-PBKDF2 (.hccapx - Wireless) ")
+            prGreen("\t\tExample - HASH: 48435058040000000002353800000000000000000000000000000000000000000000000000000000000<snip>) ")
+            prRed("\t(8) Back")
             HM_ANSWER = raw_input(": ")
             if HM_ANSWER == "0":   #NTLM aka NTHASH
                 HASH_TYPE = '1000'
@@ -192,7 +200,10 @@ def hash_mode_menu():
             elif HM_ANSWER == "6": #Kerberos 5 AS-REP etype 23 (AS-REP ROASTING)
                 HASH_TYPE = '18200'
                 return (HASH_TYPE)
-            elif HM_ANSWER == "7":
+            elif HM_ANSWER == "7": #WPA-EAPOL-PBKDF2 (.hccapx - Wireless)
+                HASH_TYPE = '2500'
+                return(HASH_TYPE)
+            elif HM_ANSWER == "8":#Return to the Crack Menu
                 crack_menu()
             else:
                 raw_input("You did not give a valid answer, press any key to try again \n")
@@ -297,14 +308,12 @@ def crack_menu_0():
     subprocess.call(hc_cmd1)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-#######################################################TEST THE BELOW LINE
-       # subprocess.call('cut -d' + ' ":" ' + '-f 2 ' + os.path.join(L00T_POT_DIR, POT) + ' > ' + os.path.join(L00T_POT_DIR, POT + '.format1 '), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -351,12 +360,12 @@ def crack_menu_2():
     subprocess.call(hc_cmd2)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd4 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd4)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -384,12 +393,12 @@ def crack_menu_3():
     subprocess.call(hc_cmd1)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_ABS_PATH, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -429,12 +438,12 @@ def crack_menu_5():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -456,12 +465,12 @@ def crack_menu_6():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -495,12 +504,12 @@ def crack_menu_7():
     subprocess.call(hc2)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -522,12 +531,12 @@ def crack_menu_8():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -543,9 +552,9 @@ def crack_menu_9():
     global SINGLE_HASH_BOOLEAN
     global FILE_HASH_BOOLEAN
     global RULE_SET_DIRECTORY
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
-    elif WIRELESS_BOOLEAN:
+    elif WIRELESS_BOOLEAN and not CEWL_BOOLEAN:
         HASH_PATH_AND_NAME = os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT)
         SINGLE_WORDLIST = os.path.join(WORDLIST_DIRECTORY, 'rockyou.txt')
     else:
@@ -560,12 +569,12 @@ def crack_menu_9():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_ABS_PATH, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -580,7 +589,7 @@ def crack_menu_10():
     global FILE_HASH_BOOLEAN
     global HASH_PATH_AND_NAME
     global RULE_SET_DIRECTORY
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
     elif WIRELESS_BOOLEAN:
         HASH_PATH_AND_NAME = os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT)
@@ -597,12 +606,12 @@ def crack_menu_10():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_ABS_PATH]
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -615,7 +624,7 @@ def crack_menu_11():
     WORDLIST_DIRECTORY = "/opt/wordlists" # Needed to reset the wordlist directory.
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_PATH_AND_NAME
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
     elif WIRELESS_BOOLEAN:
         HASH_PATH_AND_NAME = os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT)
@@ -634,12 +643,12 @@ def crack_menu_11():
     subprocess.call(hc2)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -653,7 +662,7 @@ def crack_menu_12():
     global DEFAULT_CEWL_FILE_OUTPUT
     global FILE_HASH_BOOLEAN
     global HASH_PATH_AND_NAME
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
     elif WIRELESS_BOOLEAN:
         HASH_PATH_AND_NAME = os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT)
@@ -670,12 +679,12 @@ def crack_menu_12():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -691,7 +700,7 @@ def crack_menu_13():
     global SINGLE_HASH_BOOLEAN
     global FILE_HASH_BOOLEAN
     global RULE_SET_DIRECTORY
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
     elif WIRELESS_BOOLEAN:
         HASH_PATH_AND_NAME = os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT)
@@ -708,12 +717,12 @@ def crack_menu_13():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -728,7 +737,7 @@ def crack_menu_14():
     global FILE_HASH_BOOLEAN
     global HASH_PATH_AND_NAME
     global RULE_SET_DIRECTORY
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
     elif WIRELESS_BOOLEAN:
         HASH_PATH_AND_NAME = os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT)
@@ -753,12 +762,12 @@ def crack_menu_14():
         os.system('clear')
     hc2 = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'd3adhob0.rule'), '-w', '3', '-O']
     subprocess.call(hc2)
-    if HM_ANSWER == '0' or HM_ANSWER == '1':
+    if HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -773,7 +782,7 @@ def crack_menu_15():
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_ABS_PATH
     global RULE_SET_DIRECTORY
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
     elif WIRELESS_BOOLEAN:
         HASH_PATH_AND_NAME = os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT)
@@ -790,7 +799,7 @@ def crack_menu_15():
     rule_set_walk()
     return
 
-#Rsmangler - Create multiple permutations of a word
+#Rsmangler - Create multiple permutations of a word - Menu 19)
 def rsmangler_menu():
     global SINGLE_HASH_BOOLEAN
     global SINGLE_WORDLIST
@@ -814,15 +823,16 @@ def rsmangler_menu():
     hash_mode_menu()
     pot_function()
     if SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN == False:
-        SINGLE_WORDLIST = RSMANGLER_OUTPUT_DIR_AND_FIRMNAME # Space added for correct argument spacing
-    elif SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+        SINGLE_WORDLIST = RSMANGLER_OUTPUT_DIR_AND_FIRMNAME #Space added for correct argument spacing
+    elif SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
     elif FILE_HASH_BOOLEAN and CEWL_BOOLEAN == False:
-        SINGLE_WORDLIST = RSMANGLER_OUTPUT_DIR_AND_FIRMNAME # Space added for correct argument spacing
+        SINGLE_WORDLIST = RSMANGLER_OUTPUT_DIR_AND_FIRMNAME #Space added for correct argument spacing
     elif FILE_HASH_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
-    elif WIRELESS_BOOLEAN:
-        SINGLE_WORDLIST = WIRELESS_INPUT
+    elif WIRELESS_BOOLEAN and not CEWL_BOOLEAN:
+        SINGLE_WORDLIST = RSMANGLER_OUTPUT_DIR_AND_FIRMNAME
+        os.chdir(WIRELESS_UPLOAD_DIR)
     os.system('clear')
     hc = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'OneRuleToRuleThemAll.rule'), '-w', '3', '-O']
     subprocess.call(hc)
@@ -842,12 +852,12 @@ def rsmangler_menu():
     subprocess.call(hc2)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -891,7 +901,7 @@ def cewl_menu_17():
     global WIRELESS_INPUT
     if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
-    elif WIRELESS_BOOLEAN:
+    elif WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = WIRELESS_INPUT
     else:
         raw_input("Cewl Wordlist not ran yet!, run cewl first, (Option 16)")
@@ -901,12 +911,12 @@ def cewl_menu_17():
     subprocess.call(hc)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -918,12 +928,13 @@ def cewl_menu_17():
 #Automated Cewl wordlist - {4 ANY Characters RIGHT --> LEFT incrementally} (could take a while dependant on size of cewl wordlist generated)
 def cewl_menu_18():
     global SINGLE_WORDLIST
+    global SINGLE_HASH_BOOLEAN
     global DEFAULT_CEWL_FILE_OUTPUT
     global CEWL_BOOLEAN
     global FILE_HASH_BOOLEAN
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or single_hash_boolean and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
-    elif WIRELESS_BOOLEAN:
+    elif WIRELESS_BOOLEAN and not CEWL_BOOLEAN:
         SINGLE_WORDLIST = WIRELESS_INPUT
     else:
         raw_input("Cewl Wordlist not ran yet!, run cewl first, (Option 16)")
@@ -943,12 +954,12 @@ def cewl_menu_18():
     subprocess.call(hc4)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, pot) + '.sorted ', shell=True)
         subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, POT + '.format3'), shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -988,9 +999,9 @@ def passphrase_menu():
     WORDLIST_DIRECTORY = "/opt/wordlists"
     global DEFAULT_CEWL_FILE_OUTPUT
     global HASH_ABS_PATH
-    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN:
+    if CEWL_BOOLEAN and FILE_HASH_BOOLEAN or SINGLE_HASH_BOOLEAN and CEWL_BOOLEAN or WIRELESS_BOOLEAN and CEWL_BOOLEAN:
         SINGLE_WORDLIST = DEFAULT_CEWL_FILE_OUTPUT
-    elif WIRELESS_BOOLEAN:
+    elif WIRELESS_BOOLEAN and not CEWL_BOOLEAN:
         SINGLE_WORDLIST = WIRELESS_INPUT
     else:
         SINGLE_WORDLIST = os.path.join(WORDLIST_DIRECTORY, 'passphrases/passphrases.txt')
@@ -1014,18 +1025,18 @@ def passphrase_menu():
     subprocess.call(hc2)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
     else:
         return
 
-#Any Menu
+#Any Menu - Menu c)
 def any_menu():
     if ALL_MENU:
         pot_function()
@@ -1034,15 +1045,15 @@ def any_menu():
         hash_mode_menu()
         pot_function()
     os.system('clear')
-    hc1 = ['hashcat', '-a', '3', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), "?a?a?a?a?a?a?a?a?a?a?a?a", '-w', '3', '-O', '--increment']
+    hc1 = ['hashcat', '-a', '3', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--increment', "?a?a?a?a?a?a?a?a?a?a?a?a", '-w', '3', '-O']
     subprocess.call(hc1)
     if WIRELESS_BOOLEAN:
         return
-    elif HM_ANSWER == '0' or HM_ANSWER == '1':
+    elif HM_ANSWER == '0':
         hc_cmd2 = ['hashcat', '-m', HASH_TYPE, '-a', '0', '--username', '--session', 'all', '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME]
         subprocess.call(hc_cmd2)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
-    elif HM_ANSWER == '2':
+    elif HM_ANSWER == '1' or HM_ANSWER == '2':
         hc_cmd3 = ['hashcat', '-m', HASH_TYPE, '--show', '-o', os.path.join(L00T_POT_DIR, POT + '.format3'), '--outfile-format', '3', HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), '--session', 'all']
         subprocess.call(hc_cmd3)
         subprocess.call(AWK + os.path.join(L00T_POT_DIR, POT + '.format3') + " | sort > " + os.path.join(L00T_POT_DIR, POT) + '.sorted ', shell=True)
@@ -1076,6 +1087,7 @@ def crack_menu():
     global CEWL_WORDLIST_SIZE
     global L00T_POT_DIR
     global HASH_INPUT
+    global OUT
     global USER_ONLY_BOOLEAN
     global WIRELESS_BOOLEAN
     global WIRELESS_HASHES_LOADED
@@ -1168,7 +1180,7 @@ def crack_menu():
                 print""
                 print" " + "Amount of Cewl words written + Absolute Path: "
                 prYellow(CEWL_WORDLIST_SIZE)
-            elif WIRELESS_BOOLEAN:
+            elif WIRELESS_BOOLEAN: #Option 3
                 banner() # Currently display duplicates first time round, second time round it only shows one banner.. 
                 print""
                 print'\t\t\t\t\t' + '\033[40m' + '--==Multi Hash Cracking Menu==--' + '\033[0m'
@@ -1176,25 +1188,33 @@ def crack_menu():
                 print""
                 print" " + "Hash File Loaded:  ",
                 prYellow(WIRELESS_INPUT)
-                print" " + "Hashes Loaded:     ",
-                prRed(WIRELESS_HASHES_LOADED)
-                print" " + "Hashes Cracked:    ",
+                print" " + "Networks Detected:  ",
+                print NETWORKS_DETECTED.strip()
+                print" " + "SSID Loaded:     ",
+                #failing to find a better way of finding the SSID - I'm using strings on the hccapx file and extracting the second line with awk. seems consistent with the SSID.
+                #command1 = ['strings']
+                #command1.append(WIRELESS_INPUT)
+                #process1 = subprocess.Popen(command1,stdout=subprocess.PIPE)
+                #command2 = ['awk']
+                #command2.append('NR==2')
+                #process2 = subprocess.Popen(command2,stdin=process1.stdout,stdout=subprocess.PIPE)
+                #out,err = process2.communicate()
+                print '   ' + '\033[34m' + str(ESSID[2]).strip() + '\033[0m'
+                print' Hash Status:    ',
                 POT = WIRELESS_INPUT.lower()
-                POT = POT + '.pot'
+                POT += '.pot'
                 pot_absolute = os.path.join(L00T_POT_DIR, POT)
+                #Clean up and any excess pot files that are 0 bytes                                  
+                subprocess.check_call(['find', L00T_POT_DIR, '-type', 'f', '-size', '0b', '-delete'])
                 if os.path.exists(pot_absolute):
-                    with open(pot_absolute) as lines:
-                        wireless_hashes_cracked = len(lines.readlines())
-                        print' ' + '\033[92m' + str(wireless_hashes_cracked) + '\033[0m'
-                        print' ' + 'Percentage Cracked:',
-                        percent_cracked = (wireless_hashes_cracked * 100.00 / WIRELESS_HASHES_LOADED)
-                        print' ' + '\033[34m' + str(percent_cracked) + ('%') + '\033[0m'
-                        
+                    with open(pot_absolute, "r") as hashes:
+                        firstLine = hashes.readline()
+                        hash_read = csv.reader(hashes, delimiter=':')
+                        for hash_column in hash_read:
+                            print'    ' + '\033[41m' + 'Cracked!' + '\033[0m'
+                            print' Password:            ' + '\033[92m' + hash_column[1] + '\033[0m'
                 else:
-                    print' ' + "Hashes Cracked:    ",
-                    prRed("0")
-                    print' ' + 'Percentage Cracked:',
-                    print'\033[34m' + ' ' + str(0) + ('%') + '\033[0m'
+                    prRed("   Not Yet!")
             print""
             print' ' + '\033[44m' + 'Supported - NTLM -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5' + '\033[0m'
             print""
@@ -1217,11 +1237,11 @@ def crack_menu():
             prCyan("16) Cewl Test - Enter the firms website to create a bespoke, focussed wordlist")
             prLightPurple("17) Straight Cewl wordlist - (Run option 16 first to activate)")
             prCyan("18) Auto Cewl wordlist - {4 ANY Characters RIGHT --> LEFT incrementally -> Dive Rule}")
-            prLightPurple("19) Wordlist Mangling Tool - Various permutations of a specified name")
+            prLightPurple("19) Wordlist Mangling Tool - Various permutations of a specified word")
             prCyan("a) Multiple Tests - All of the above, mainly in ascending numerical order")
             prLightPurple("b) Passphrases testing - Multiple words strung together using multiple rule sets")
             prCyan("c) Auto Increment ANY combination upto 12 characters '?a?a?a?a?a?a?a?a?a?a?a?a'")
-            prRed("d) Back to Main Menu")
+            prRed("x) Back to Main Menu")
             crack_option = {"0": crack_menu_0,
                             "1": crack_menu_1,
                             "2": crack_menu_2,
@@ -1245,7 +1265,7 @@ def crack_menu():
                             "a": increment_menu,
                             "b": passphrase_menu,
                             "c": any_menu,
-                            "d": back_crack
+                            "x": back_crack
                            }
             try:
                 selection = raw_input("\n Select an Option: ")
@@ -1316,33 +1336,41 @@ def hash_from_file():
     HASH_ABS_PATH = str(os.path.join(HASH_UPLOAD_DIR, HASH_INPUT))
     HASH_USER = HASH_INPUT + '-users'
     HASH_USERS_ONLY = HASH_ABS_PATH + '-users'
+    if HASH_INPUT == ('back') or HASH_INPUT == ('Back') or HASH_INPUT == ('BACK'):
+        main_menu()
     try:
-        if USER_ONLY_BOOLEAN == False and os.path.isfile(HASH_INPUT): #Option 1
-            uniq = open(HASH_ABS_PATH, 'r').read()
-            uniq = uniq.split()
-            clean_list = []
-            for word in uniq:
-                if word not in clean_list:
-                    clean_list.append(word)
-            HASHES_LOADED = len(uniq) 
-            HASH_USER = HASH_INPUT #Take the user input and continue to crack menu.
-        elif USER_ONLY_BOOLEAN and HASH_INPUT.endswith('-users'): #Option2 - If the input ends with '-users' 
-            HASH_USER = HASH_INPUT
-            with open(HASH_USER) as lines:
-                HASHES_LOADED = len(lines.readlines())
-        elif USER_ONLY_BOOLEAN and os.path.isfile(HASH_USERS_ONLY): #Option 2 - Another File Exists with (-users)
-            HASH_USER = HASH_INPUT + '-users' #Select the file that exists already with -users on the filename
-            with open(HASH_USER) as lines:
-                HASHES_LOADED = len(lines.readlines())
+        if os.path.isfile(HASH_INPUT):
+            if USER_ONLY_BOOLEAN == False:# and os.path.isfile(HASH_INPUT): #Option 1
+                uniq = open(HASH_ABS_PATH, 'r').read()
+                uniq = uniq.split()
+                clean_list = []
+                for word in uniq:
+                    if word not in clean_list:
+                        clean_list.append(word)
+                HASHES_LOADED = len(uniq) 
+                HASH_USER = HASH_INPUT #Take the user input and continue to crack menu.
+            elif USER_ONLY_BOOLEAN and HASH_INPUT.endswith('-users'): #Option2 - If the input ends with '-users' 
+                HASH_USER = HASH_INPUT
+                with open(HASH_USER) as lines:
+                    HASHES_LOADED = len(lines.readlines())
+            elif USER_ONLY_BOOLEAN and os.path.isfile(HASH_USERS_ONLY): #Option 2 - Another File Exists with (-users)
+                HASH_USER = HASH_INPUT + '-users' #Select the file that exists already with -users on the filename
+                with open(HASH_USER) as lines:
+                    HASHES_LOADED = len(lines.readlines())
+            else:
+                if USER_ONLY_BOOLEAN and not os.path.isfile(HASH_USERS_ONLY): #Option 2 - File with (-users) doesn't not exist.
+                    for x in files:
+                        if not x.endswith('-users') and not os.path.exists(HASH_USERS_ONLY):
+                            AWK_DOLLAR_SPLIT = "'!/^[^:]*\$[^:]*:/'"
+                            convert = ("awk" + " " + AWK_DOLLAR_SPLIT + " " + HASH_ABS_PATH + " > " + HASH_USERS_ONLY)
+                            subprocess.call(convert, shell=True)
+                            with open(HASH_USERS_ONLY) as lines:
+                                HASHES_LOADED = len(lines.readlines())
         else:
-            if USER_ONLY_BOOLEAN and not os.path.isfile(HASH_USERS_ONLY): #Option 2 - File with (-users) doesn't not exist.
-                for x in files:
-                    if not x.endswith('-users') and not os.path.exists(HASH_USERS_ONLY):
-                        AWK_DOLLAR_SPLIT = "'!/^[^:]*\$[^:]*:/'"
-                        convert = ("awk" + " " + AWK_DOLLAR_SPLIT + " " + HASH_ABS_PATH + " > " + HASH_USERS_ONLY)
-                        subprocess.call(convert, shell=True)
-                        with open(HASH_USERS_ONLY) as lines:
-                            HASHES_LOADED = len(lines.readlines())
+            print' ' + 'Error:' + ' ' + HASH_INPUT + ' ' + 'file not found' + ' ' + 'try again or type ' + '\033[31m' + 'back' + '\033[0m' 
+            time.sleep(1)
+            os.system('clear')
+            hash_from_file()
     except KeyError:
         os.system('clear')
         pass
@@ -1353,6 +1381,8 @@ def hash_from_file():
 #Wireless Menu
 #This menu selects either the .hccapx file or converts the .cap file to .hccapx on the fly.
 def wireless_menu():
+    global ESSID
+    global NETWORKS_DETECTED
     global WIRELESS_ABS_PATH
     global WIRELESS_BOOLEAN
     global WIRELESS_HASHES_LOADED
@@ -1362,54 +1392,89 @@ def wireless_menu():
     print"Select the capture file from the capture_upload directory\n"
     print""
     #Used for removing emacs created backup files ending with a tilde
-    ignore = '~'
+    ext1 = '.cap'
+    ext2 = 'hccapx'
     for root, dirs, files in os.walk(WIRELESS_UPLOAD_DIR):
         files.sort()
         for f in files:
-            if not f.endswith(ignore):
+            if f.endswith(ext1) or f.endswith(ext2):
                 print" \t" + os.path.join(f)
     print""
     print'\033[33m' + ' ' + 'Select the filename from the above list to be uploaded:' + '\033[0m'
     os.chdir(WIRELESS_UPLOAD_DIR)
     readline.parse_and_bind("tab: complete")
     WIRELESS_INPUT = raw_input("------> ")
+    if WIRELESS_INPUT == ('back') or WIRELESS_INPUT == ('Back') or WIRELESS_INPUT == ('BACK'):
+        main_menu()
     try:
         if os.path.isfile(WIRELESS_INPUT):
-            if WIRELESS_INPUT.endswith(CAP_FILE_EXT): # If a .cap file is selected, we convert it to .hccapx
-                STRIP_CAP_FILE = os.path.splitext(WIRELESS_INPUT)[0] #Strip off the file ext                          
+            if WIRELESS_INPUT.endswith(CAP_FILE_EXT): #If a .cap file is selected, we convert it to .hccapx
+                STRIP_CAP_FILE = os.path.splitext(WIRELESS_INPUT)[0] #Strip off the file ext
                 HCCAPX_FILE = STRIP_CAP_FILE + '.hccapx' #Add .hccapx
                 print'You have selected the capture file' + ' ' + WIRELESS_INPUT
                 time.sleep(1)
                 print''
                 print'We will now convert the capture file' + ' ' + '\033[33m' + WIRELESS_INPUT + '\033[0m' + ' ' + 'into' + ' ' + '\033[92m' + HCCAPX_FILE + '\033[0m' + ' ' + 'for hashcat to process.....'
                 print''
-                time.sleep(3)
-                CONVERT_CAP = [os.path.join(TOOLS_DIR, 'cap2hccapx.bin'), WIRELESS_INPUT, HCCAPX_FILE] #Execute and convert
-                subprocess.call(CONVERT_CAP)
+                time.sleep(4)
+                p = subprocess.Popen([os.path.join(TOOLS_DIR, 'cap2hccapx.bin'), WIRELESS_INPUT, HCCAPX_FILE], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                while p.poll() is None:
+                    time.sleep(0.5)
+                if p.returncode == 0:
+                    a = p.stdout.readlines() #Put the output into a list
+                    print a
+                    NETWORKS_DETECTED = a[0]
+                    NETWORKS_DETECTED = str(NETWORKS_DETECTED).strip(' ')[19] #Extract the number of Networks detected for aesthetics for wireless_menu()
+                    print NETWORKS_DETECTED
+                    ESSID = a[2].split('=')
+                    print ESSID[2]
+                else:
+                    print p.returncode
+                    print 'File corrupted - (Invalid Pcap Header) - Returning to the main menu'
+                    time.sleep(3)
                 WIRELESS_ABS_PATH = (os.path.join(WIRELESS_UPLOAD_DIR, HCCAPX_FILE))
-                main_menu()# Current issue workaround - we cant directly select the .hccapx due to hascat error message.
-            elif WIRELESS_INPUT.endswith(HCCAPX_FILE_EXT):
+                main_menu()# Current issue workaround - we cant directly select the .hccapx due to hashcat error message.
+            elif WIRELESS_INPUT.endswith(HCCAPX_FILE_EXT): #In order to get the display data, we can only get it from the cap file.
+                STRIP_HCCAPX_FILE = os.path.splitext(WIRELESS_INPUT)[0] #Strip off the extension
+                CAP_FILE = STRIP_HCCAPX_FILE + '.cap'
                 WIRELESS_ABS_PATH = (os.path.join(WIRELESS_UPLOAD_DIR, WIRELESS_INPUT))
+                p = subprocess.Popen([os.path.join(TOOLS_DIR, 'cap2hccapx.bin'), CAP_FILE, WIRELESS_INPUT], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                while p.poll() is None:
+                    time.sleep(0.5)
+                if p.returncode == 0:
+                    a = p.stdout.readlines() #Put the output into a list                                                                                 
+                    NETWORKS_DETECTED = a[0]
+                    NETWORKS_DETECTED = str(NETWORKS_DETECTED).strip(' ')[19] #Extract the number of Networks detected for aesthetics for wireless_menu()
+                    print NETWORKS_DETECTED
+                    ESSID = a[2].split('=')
+                else:
+                    print p.returncode
+                    print 'File corrupted - (Invalid Pcap Header) - Returning to the main menu'
+                    time.sleep(3)
+                STRIP_CAP_FILE = os.path.splitext(CAP_FILE)[0] #Strip off the '.cap'
+                HCCAPX_FILE = CAP_FILE + '.hccapx'# Put the file extension back on
+                WIRELESS_ABS_PATH = (os.path.join(WIRELESS_UPLOAD_DIR, HCCAPX_FILE))
             else:
                 print'Only .cap or .hccapx files can be used'
                 time.sleep(2)
                 wireless_menu()
-            with open(WIRELESS_ABS_PATH) as lines:
-                WIRELESS_HASHES_LOADED = len(lines.readlines())
-                os.system('clear')
-                crack_menu()
+            os.system('clear')
+            crack_menu()
         else:
-            print' ' + 'Error:' + ' ' + WIRELESS_INPUT + ' ' + 'file not found'
-            time.sleep(1)
+            print' ' + 'Error:' + ' ' + WIRELESS_INPUT + ' ' + 'file not found'  + ' ' + 'try again or type' + '\033[31m' + ' ' + 'back' + ' ' + '\033[0m'
+            time.sleep(2)
             os.system('clear')
             wireless_menu()
     except KeyError:
         os.system('clear')
         pass
-    return
+    os.system('clear')
+    crack_menu()
+
 
 #Report and Stats Menu
 def report_menu():
+    global HM_ANSWER
     os.system('clear')
     banner()
     print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
@@ -1433,17 +1498,132 @@ def report_menu():
         os.system('clear')
         print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
         print''
-        #Step 1 - Strip out just the password for the pot file
+    banner()
+    #Step 1 - Confirm the hash type
+    hash_mode_menu()
+    #Step 2 - Strip out just the password for the pot file
+    if HM_ANSWER == "0" or HM_ANSWER == "3" or HM_ANSWER == "4" or HM_ANSWER == "7": #Used for hash:password formatting
         subprocess.call('cut -d' + ' ":" ' + '-f 2 ' + os.path.join(L00T_POT_DIR, STAT_INPUT) + ' > ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1 '), shell=True)
-        #Step 2 - Execute Stats on cut file
-        subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1') + ' ' + '-o' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats | less', shell=True)
-        #Step 3 - Remove the unnecessasry file as we don't need it anymore.
-        subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1'), shell=True)
-        #(WORKS)subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT) + ' ' + '-o' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats | less', shell=True)
-        print('Report Complete - Returning to Main Menu')
-        time.sleep(2)
+    elif HM_ANSWER == "1" or HM_ANSWER == "2": #Used for Net-NTLMv1/2 formatting
+        subprocess.call('cut -d' + ' ":" ' + '-f 7 ' + os.path.join(L00T_POT_DIR, STAT_INPUT) + ' > ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1 '), shell=True)
+    #Step 3 - Execute Stats on cut file
+    subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1') + ' | less', shell=True)
+    subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1') + ' ' + '>' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats', shell=True)
+    #Step 4 - Remove the unnecessasry file as we don't need it anymore.
+    subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1'), shell=True)
+    #(WORKS)subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT) + ' ' + '-o' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats | less', shell=True)
+    os.system('clear')    
+    print('Report Complete - Returning to Main Menu')
+    time.sleep(2)
+    main_menu()
+
+#l00t Menu - Full dump as a bash output with standard in from 'less'
+def l00t_menu_full():
+    os.system('clear')
+    banner()
+    print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
+    prCyan(L00T_POT_DIR)
+    print""
+    print'\033[34m' + ' ' + 'Below are the stats files created from sucessfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    print''
+    for root, dirs, files in os.walk(L00T_POT_DIR):
+        files.sort()
+        for f in files:
+            if f.endswith('.pot') or f.endswith('.pot.sorted'):
+                print' \t' + os.path.join(f)
+    print''
+    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type "back"' + '\033[0m'
+    os.chdir(L00T_POT_DIR)
+    readline.parse_and_bind("tab: complete")
+    L00T_INPUT = raw_input(str("------> "))
+    if L00T_INPUT == ('back') or L00T_INPUT == ('Back') or L00T_INPUT == ('BACK'):
         main_menu()
-        
+    try:
+        if os.path.isfile(L00T_INPUT):
+            os.system('clear')
+            print'\033[33m' + ' ' + 'L00T Information' + '\033[0m'
+            print''
+            print''
+            subprocess.call('less ' + L00T_INPUT, shell=True)
+            L00T_FILE = open(L00T_INPUT, "r")                
+            l00t_contents = L00T_FILE.read()                 
+            print(l00t_contents)
+            L00T_FILE.close()
+            print''
+            raw_input('\033[33m' + ' ' + 'Press any key to return to the main menu (Scroll Up for previous results)\n' + '\033[0m')
+            main_menu()
+        else:
+            print' ' + 'Error:' + ' ' + L00T_INPUT + ' ' + 'file not found'
+            time.sleep(1)
+            os.system('clear')
+            l00t_menu_full()
+    except KeyError:
+        os.system('clear')
+        pass
+    return
+
+
+
+#l00t Menu - Simple menu that displays key info from current l00t found
+def l00t_menu_key():
+    os.system('clear')
+    banner()
+    print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
+    prCyan(L00T_POT_DIR)
+    print""
+    print'\033[34m' + ' ' + 'Below are the stats files created from sucessfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    print''
+    for root, dirs, files in os.walk(L00T_POT_DIR):
+        files.sort()
+        for f in files:
+            if f.endswith('.pot') or f.endswith('.pot.sorted'):
+                print' \t' + os.path.join(f)
+    print''
+    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type "back"' + '\033[0m'
+    os.chdir(L00T_POT_DIR)
+    readline.parse_and_bind("tab: complete")
+    L00T_INPUT = raw_input(str("------> "))
+    if L00T_INPUT == ('back') or L00T_INPUT == ('Back') or L00T_INPUT == ('BACK'):
+        main_menu()
+    try:
+        if os.path.isfile(L00T_INPUT):
+            os.system('clear')
+            hash_mode_menu()
+            os.system('clear')
+            print'\033[33m' + ' ' + 'Key Compromised L00T Information' + '\033[0m'
+            print''
+            if HASH_TYPE == '1000': #NTLM
+                print'  ' + '\033[33m' + 'Domain\Username' + '\033[0m' + '\t\t\t' + '\033[34m' + 'NTLM (NTHASH)' + '\033[0m' + '\033[31m' + '\t\t\t\t\t' 'Password' + '\033[0m'
+                with open(L00T_INPUT, "r") as hashes:
+                    hash_read = csv.reader(hashes, delimiter=':')
+                    for hash_column in hash_read:
+                        print'  ' + '\033[33m' + hash_column[0] + '\033[0m' + '\t\t' + '\033[34m' + hash_column[1] + '\033[0m' + '\t\t\t' + '\033[31m' + hash_column[2] + '\033[0m'
+            elif HASH_TYPE == '5500' or HASH_TYPE == '5600': #Net-NTLMv1/v2
+                print'  ' + '\033[33m' + 'Domain' + '\033[0m' + '\t\t' + '\033[34m' + 'Username' + '\033[0m' + '\033[31m' + '\t\t\t' 'Password' + '\033[0m'
+                with open(L00T_INPUT, "r") as hashes:
+                    hash_read = csv.reader(hashes, delimiter=':')
+                    for hash_column in hash_read:
+                        print'  ' + '\033[33m' + hash_column[2] + '\033[0m' + '\t\t' + '\033[34m' + hash_column[0] + '\033[0m' + '\t\t\t' + '\033[31m' + hash_column[6] + '\033[0m'
+            elif HASH_TYPE == '0' or HASH_TYPE == '1800': #UNIX MD5 / SHA512
+                print'  ' + '\033[33m' + 'Hash' + '\033[0m' + '\t\t\t\t\t\t' + '\033[34m' + 'Password' + '\033[0m'
+                with open(L00T_INPUT, "r") as hashes:
+                    hash_read = csv.reader(hashes, delimiter=':')
+                    for hash_column in hash_read:
+                        print'  ' + '\033[33m' + hash_column[0] + '\033[0m' + '\t\t' + '\033[34m' + hash_column[1] + '\033[0m'
+                        print''
+            raw_input('\033[33m' + ' ' + 'Press any key to return to the main menu (Scroll Up for previous results)\n' + '\033[0m')
+            main_menu()
+        else:
+            print' ' + 'Error:' + ' ' + L00T_INPUT + ' ' + 'file not found'
+            time.sleep(1)
+            os.system('clear')
+            l00t_menu_full()
+    except KeyError:
+        os.system('clear')
+        pass
+    return
+
+
 #Exit system
 def program_exit():
     sys.exit()
@@ -1456,16 +1636,20 @@ def main_menu():
             banner()
             prCyan("\t(0) Input OS - Singluar Hash - (MD5, NTLM, NetNTLMv1/2, Kerberos)")
             prLightPurple("\t(1) Input OS - Hashes From File - (MD5, NTLM, NetNTLMv1/2, Kerberos)")
-            prCyan("\t(2) Input Hash Dump & filter out usernames - Filters on '$' in first field")
+            prCyan("\t(2) Input Hash Dump & filter out usernames - e.g. useful for NTDS.dit")
             prLightPurple("\t(3) Input Wireless - Capture From File - (WPA-EAPOL-PBKDF2) {*.cap, *.hccapx}")
             prCyan("\t(4) Run Statistical Analysis on l00t")
-            prRed("\t(5) Exit")
+            prLightPurple("\t(5) Display l00t - Full Dump")
+            prCyan("\t(6) Display l00t - Key Information Summary (BETA)")
+            prRed("\t(x) Exit")
             options = {"0": single_hash_menu,
                        "1": hash_from_file,
                        "2": hash_from_file, #not a typo
                        "3": wireless_menu,
                        "4": report_menu,
-                       "5": program_exit,
+                       "5": l00t_menu_full,
+                       "6": l00t_menu_key,
+                       "x": program_exit,
                       }
             try:
                 task = raw_input("\n Choose an Option: ")
@@ -1479,3 +1663,4 @@ def main_menu():
 
 if __name__ == '__main__':
     main_menu()
+
