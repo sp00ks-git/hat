@@ -2,7 +2,7 @@
 ![PyPI version](https://img.shields.io/pypi/v/bloodhound.svg)
 # HAT - Hashcat Automation Tool
 An automated Hashcat tool for common wordlists and rules to speed up the process of cracking hashes during engagements.
-HAT is simple a wrapper for Hashcat (with a few extra features) - https://hashcat.net, however I take no credit for that superb tool.
+HAT is simply a wrapper for Hashcat (with a few extra features) - https://hashcat.net, however I take no credit for that superb tool.
 
 ***Linux support only***  
 
