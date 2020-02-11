@@ -3,7 +3,8 @@ An automated Hashcat tool for common wordlists and rules to speed up the process
 HAT is simple a wrapper for Hashcat (with a few extra features) - https://hashcat.net, however I take no credit for that superb tool.
 
 ***Linux support only***  
-
+![Python 2.7 and 3 compatible](https://img.shields.io/badge/python-2.7%2C%203.x-blue.svg)
+![PyPI version](https://img.shields.io/pypi/v/bloodhound.svg)
 Supported Hashes:
 
 NTLMv2 (NTHASH) -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5 (Kerberoasting)
