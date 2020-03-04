@@ -362,6 +362,8 @@ def crack_menu_2():
         os.system('clear')
         hc = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'OneRuleToRuleThemAll.rule'), '-w', '3', '-O']
         subprocess.call(hc)
+        hc1 = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'dive.rule'), '-w', '3', '-O']
+        subprocess.call(hc1)
     if WIRELESS_BOOLEAN:
         return
     elif HM_ANSWER == '0':
@@ -1678,41 +1680,41 @@ def hash_menu_full(): #Menu 7
     os.system('clear')
     banner()
     print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
-    prCyan(L00T_POT_DIR)
-    print""
-    print'\033[34m' + ' ' + 'Below are the stats files created from sucessfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    prCyan(HASH_UPLOAD_DIR)
     print''
-    for root, dirs, files in os.walk(L00T_POT_DIR):
+    print'\033[34m' + ' ' + 'Below are the hash files in the hash upload directory.. (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    print''
+    for root, dirs, files in os.walk(HASH_UPLOAD_DIR):
         files.sort()
         for f in files:
-            if f.endswith('.pot') or f.endswith('.pot.sorted'):
+            if not f.endswith('~'):
                 print' \t' + os.path.join(f)
     print''
     print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type "back"' + '\033[0m'
     os.chdir(HASH_UPLOAD_DIR)
     readline.parse_and_bind("tab: complete")
-    L00T_INPUT = raw_input(str("------> "))
-    if L00T_INPUT == ('back') or L00T_INPUT == ('Back') or L00T_INPUT == ('BACK'):
+    HASH_INPUT = raw_input(str("------> "))
+    if HASH_INPUT == ('back') or HASH_INPUT == ('Back') or HASH_INPUT == ('BACK'):
         main_menu()
     try:
-        if os.path.isfile(L00T_INPUT):
+        if os.path.isfile(HASH_INPUT):
             os.system('clear')
-            print'\033[33m' + ' ' + 'L00T Information' + '\033[0m'
+            print'\033[33m' + ' ' + 'Hash Information' + '\033[0m'
             print''
             print''
-            subprocess.call('less ' + L00T_INPUT, shell=True)
-            L00T_FILE = open(L00T_INPUT, "r")
-            l00t_contents = L00T_FILE.read()
-            print(l00t_contents)
-            L00T_FILE.close()
+            subprocess.call('less ' + HASH_INPUT, shell=True)
+            HASH_FILE = open(HASH_INPUT, "r")
+            HASH_CONTENTS = HASH_FILE.read()
+            print(HASH_CONTENTS)
+            HASH_FILE.close()
             print''
             raw_input('\033[33m' + ' ' + 'Press any key to return to the main menu (Scroll Up for previous results)\n' + '\033[0m')
             main_menu()
         else:
-            print' ' + 'Error:' + ' ' + L00T_INPUT + ' ' + 'file not found'
+            print' ' + 'Error:' + ' ' + HASH_INPUT + ' ' + 'file not found'
             time.sleep(1)
             os.system('clear')
-            l00t_menu_full()
+            HASH_menu_full()
     except KeyError:
         os.system('clear')
         pass
