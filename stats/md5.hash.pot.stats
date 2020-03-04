@@ -1,1 +1,21 @@
-?d?d?d?d?l?d?d?d?d?d?l?l?d?d?d?d?d?l?d?d?l?d?d?d?d?l?d?l?d?d?l?d?s?l?l?l?l?l?l?l,1
+[*] Analyzing passwords in [/opt/hat/l00t/md5.hash.pot.format1]
+[+] Analyzing 100% (1/1) of passwords
+[*] Statistics below is relative to the number of analyzed passwords, not total number of passwords
+
+[*] Length:
+[+]                         7: 100% (1)
+
+[*] Character-set:
+[+]                loweralpha: 100% (1)
+
+[*] Password complexity:
+[+]                     digit: min(0) max(0)
+[+]                     lower: min(7) max(7)
+[+]                     upper: min(0) max(0)
+[+]                   special: min(0) max(0)
+
+[*] Simple Masks:
+[+]                    string: 100% (1)
+
+[*] Advanced Masks:
+[+]            ?l?l?l?l?l?l?l: 100% (1)

@@ -17,7 +17,6 @@ import os
 import pprint as pp
 import readline
 import subprocess
-#from subprocess import Popen, PIPE
 import sys
 import time
 
@@ -87,7 +86,7 @@ os.system('clear')
 AWK = " " + "awk '!x[$0]++'" + " "
 
 #HM_ANSWER set to '999' - Used if not declared for the stats menu.
-HM_ANSWER = "999"
+#HM_ANSWER = "999"
 
 #Declare Paths
 #First make the hat absolute path dynamic and go up one level to accomodate each related path
@@ -1198,14 +1197,6 @@ def crack_menu():
                 print" " + "Networks Detected:  ",
                 print NETWORKS_DETECTED.strip()
                 print" " + "SSID Loaded:     ",
-                #failing to find a better way of finding the SSID - I'm using strings on the hccapx file and extracting the second line with awk. seems consistent with the SSID.
-                #command1 = ['strings']
-                #command1.append(WIRELESS_INPUT)
-                #process1 = subprocess.Popen(command1,stdout=subprocess.PIPE)
-                #command2 = ['awk']
-                #command2.append('NR==2')
-                #process2 = subprocess.Popen(command2,stdin=process1.stdout,stdout=subprocess.PIPE)
-                #out,err = process2.communicate()
                 print '   ' + '\033[34m' + str(ESSID[2]).strip() + '\033[0m'
                 print' Hash Status:    ',
                 POT = WIRELESS_INPUT.lower()
@@ -1384,7 +1375,6 @@ def hash_from_file():
     os.system('clear')
     crack_menu()
 
-
 #Wireless Menu
 #This menu selects either the .hccapx file or converts the .cap file to .hccapx on the fly.
 def wireless_menu():
@@ -1518,7 +1508,6 @@ def report_menu():
     subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1') + ' ' + '>' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats', shell=True)
     #Step 4 - Remove the unnecessasry file as we don't need it anymore.
     subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1'), shell=True)
-    #(WORKS)subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT) + ' ' + '-o' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats | less', shell=True)
     os.system('clear')    
     print('Report Complete - Returning to Main Menu')
     time.sleep(2)
@@ -1613,8 +1602,6 @@ def l00t_menu_full(): #Menu 5
         os.system('clear')
         pass
     return
-
-
 
 #l00t Menu - Simple menu that displays key info from current l00t found
 def l00t_menu_key(): #Menu 6
@@ -1720,9 +1707,6 @@ def hash_menu_full(): #Menu 7
         pass
     return
                                                                                                                                                     
-
-
-
 #Exit system
 def program_exit():
     sys.exit()
