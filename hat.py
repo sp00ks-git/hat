@@ -1282,12 +1282,19 @@ def single_hash_menu():
     SINGLE_HASH_BOOLEAN = True
     os.system('clear')
     banner()
-    print"Example NetNTLMv2 Hash"
-    print"admin::N46iSNekpT:08ca45b7d7ea58ee:88dcbe4446168966a153a0064958dac6:5c7830315c7830310000000000000b45c67103d07d7b95acd12ffa11230e0000000052920b85f78d013c31cdb3b92f5d765c783030"
-    print"Password - hashcat"
-    print""
-    single_hash = raw_input(" Add your hash" + '\n')
-    single_hash_string = str(single_hash)
+    print'\033[33m' + ' ' + 'Welcome to the Manual Hash upload Function' + '\033[0m'
+    print'\033[33m' + ' ' + 'Please enter your hash below as prompted. An example hash is shown' + '\033[0m'
+    print''
+    print' ' + '\033[44m' + 'Supported - NTLM -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5' + '\033[0m'
+    print''
+    print'\033[34m' + ' ' + 'Example NetNTLMv2 Hash - (Password = "hashcat")' + '\033[0m'
+    print' ' + 'admin::N46iSNekpT:08ca45b7d7ea58ee:88dcbe4446168966a153a0064958dac6:5c7830315c7830310000000000000b45c67103d07d7b95acd12ffa11230e0000000052920b85f78d013c31cdb3b92f5d765c783030'
+    print''
+    single_hash = raw_input(' Input your hash or type ' +  '\033[31m' + '"back"' + '\033[0m' + ' to go back to the main menu' + '\n' + ' ')
+    if single_hash == "back" or single_hash == "Back" or single_hash == "BACK":
+        main_menu()
+    else:
+        single_hash_string = str(single_hash)
     print""
     print" You entered : " + '\n' + single_hash_string
     print" OK - Need to put the hash into a file..." #Put hash into a file
@@ -1485,7 +1492,7 @@ def report_menu():
             if f.endswith('.pot'):
                 print' \t' + os.path.join(f)
     print''
-    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type ' + '\033[0m' + '\033[31m' + '"back"' + '\033[0m'
+    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type ' + '\033[0m' + '\033[31m' + 'back' + '\033[0m'
     os.chdir(L00T_POT_DIR)
     readline.parse_and_bind("tab: complete")
     STAT_INPUT = raw_input(str("------> "))
@@ -1677,7 +1684,7 @@ def hash_menu_full(): #Menu 7
             if not f.endswith('~'):
                 print' \t' + os.path.join(f)
     print''
-    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type "back"' + '\033[0m'
+    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type ' + '\033[0m' + '\033[31m' + 'back' + '\033[0m'
     os.chdir(HASH_UPLOAD_DIR)
     readline.parse_and_bind("tab: complete")
     HASH_INPUT = raw_input(str("------> "))
