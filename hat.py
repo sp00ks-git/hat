@@ -17,6 +17,7 @@ import os
 import pprint as pp
 import readline
 import subprocess
+#from subprocess import Popen, PIPE
 import sys
 import time
 
@@ -86,7 +87,7 @@ os.system('clear')
 AWK = " " + "awk '!x[$0]++'" + " "
 
 #HM_ANSWER set to '999' - Used if not declared for the stats menu.
-#HM_ANSWER = "999"
+HM_ANSWER = "999"
 
 #Declare Paths
 #First make the hat absolute path dynamic and go up one level to accomodate each related path
@@ -112,18 +113,18 @@ HCCAPX_FILE_EXT = '.hccapx'
 def banner():
     os.system('clear')
     print""
-    prGreen("    @@@,@&&&&@@@@@@@@@@                                                       ")
-    prGreen("    @@@@@@&&&&@@@@@@@@@            `7MMF'  `7MMF'       db       MMP''MM''YMM ")
-    prGreen("     @@@@@&&&&@@@@@@@@@              MM      MM        ;MM:      P'   MM   `7 ")
-    prGreen("     @@@@@@&&&&@@@@@@@@              MM      MM       ,V^MM.          MM      ")
-    prGreen("      @@@@@&&&&@@@@@@@@              MMmmmmmmMM      ,M  `MM          MM      ")
-    prGreen("      @@@@@@&&&&@@@@@@@@             MM      MM      AbmmmqMA         MM      ")
-    prGreen("       @@@@@&&&&@@@@@@@@  .          MM      MM     A'     VML        MM      ")
-    prGreen("       @@@@@&&&&&@@@@@@&&&@@@      .JMML.  .JMML. .AMA.   .AMMA.    .JMML.    ")
-    prGreen("   %@@@@@@@@@&&@@@@@&&&@@@@@@                                                 ")
-    prGreen(" @@@@@@@@@@@@@@@@&&&@@@@@@@        --==The Hashcat Automation Toolset==--     ")
-    prGreen(" @@@@@@@@@@@@@@&&                           Created By @__sp00ks__            ")
-    prGreen("  %@@@@@@@@&                          https://github.com/sp00ks-git/hat       ")
+    prGreen("    @@@,@&&&&@@@@@@@@@@                                                         ")
+    prGreen("    @@@@@@&&&&@@@@@@@@@            `7MMF'  `7MMF'      db      MMP''MM''YMM     ")
+    prGreen("     @@@@@&&&&@@@@@@@@@              MM      MM       ;MM:     P'   MM   `7     ")
+    prGreen("     @@@@@@&&&&@@@@@@@@              MM      MM      ,V^MM.         MM          ")
+    prGreen("      @@@@@&&&&@@@@@@@@              MMmmmmmmMM     ,M  `MM         MM          ")
+    prGreen("      @@@@@@&&&&@@@@@@@@             MM      MM     AbmmmqMA        MM          ")
+    prGreen("       @@@@@&&&&@@@@@@@@  .          MM      MM    A'     VML       MM          ")
+    prGreen("       @@@@@&&&&&@@@@@@&&&@@@      .JMML.  .JMML..AMA.   .AMMA.   .JMML.        ")
+    prGreen("   %@@@@@@@@@&&@@@@@&&&@@@@@@                                                   ")
+    prGreen(" @@@@@@@@@@@@@@@@&&&@@@@@@@        --==The Hashcat Automation Toolset==--       ")
+    prGreen(" @@@@@@@@@@@@@@&&                           Created By @__sp00ks__              ")
+    prGreen("  %@@@@@@@@&                          https://github.com/sp00ks-git/hat         ")
     print""
 
 #Pot File - Create a New Potfile when using a single wordlist or the file upload functionality.
@@ -173,10 +174,13 @@ def hash_mode_menu():
             prLightPurple("\t(5) Kerberos 5 TGS-REP etype 23 - Kerberoasting Format")
             prGreen("\tRC4-HMAC-MD5 Example - $krb5tgs$23$*user$realm$test/spn*$b548eb06bae0eead3b7f639178a90cf24d9a1<snip>")
             prCyan("\t(6) AS-REP ROASTING - Kerberos 5 AS-REP etype 23")
-            prGreen("\tAS-REP23 Example - HASH: $krb5asrep$23$user@domain.com:3e156ada591263b8aab0965f5aebd837$007497<snip>")
+            prGreen("\tAS-REP23 Example - $krb5asrep$23$user@domain.com:3e156ada591263b8aab0965f5aebd837$007493e4r5t7<snip>")
             prLightPurple("\t(7) WPA-EAPOL-PBKDF2 (.hccapx - Wireless) ")
-            prGreen("\tExample - HASH: 484350580400000000023538000000000000000000000000000000000000000000000000000000<snip> ")
-            prRed("\t(8) Back")
+            prGreen("\tExample - 484350580400000000023538000000000000000000000000000000000000000000000000000000000000<snip> ")
+            prCyan("\t(8) MS SQL Hash")
+            prGreen("\tExample - 0x02003788006711b2e74e7d8cb4be96b1d187c96d30d0a5ee65d3ce1970f96e705c595f07622w3e4r1b1<snip>")
+            prLightPurple("\t(9) Custom Hash Type - ENTER a HASHCAT MODE Number")
+            prRed("\t(x) Back")
             HM_ANSWER = raw_input(": ")
             if HM_ANSWER == "0":   #NTLM aka NTHASH
                 HASH_TYPE = '1000'
@@ -187,7 +191,7 @@ def hash_mode_menu():
             elif HM_ANSWER == "2": #Net-NTLMv2 aka NTLMv2
                 HASH_TYPE = '5600'
                 return (HASH_TYPE)
-            elif HM_ANSWER == "3": #MD5 Unix
+            elif HM_ANSWER == "3": #MD5 (no salt)
                 HASH_TYPE = '0'
                 return (HASH_TYPE)
             elif HM_ANSWER == "4": #SHA-512 Unix
@@ -201,8 +205,18 @@ def hash_mode_menu():
                 return (HASH_TYPE)
             elif HM_ANSWER == "7": #WPA-EAPOL-PBKDF2 (.hccapx - Wireless)
                 HASH_TYPE = '2500'
-                return(HASH_TYPE)
-            elif HM_ANSWER == "8": #Return to the Crack Menu
+                return (HASH_TYPE)
+            elif HM_ANSWER == "8": #MS-SQL  
+                HASH_TYPE = '1300'
+                return (HASH_TYPE)
+            elif HM_ANSWER == "9": #Custom Hash Type
+                HASH_TYPE = raw_input('If you know it, enter the Hashcat mode number to use or type' + ' ' + '\033[31m' + '"back"' + '\033[0m' + '\n')
+                if HASH_TYPE == ('back') or HASH_INPUT == ('Back') or HASH_INPUT == ('BACK'):
+                    break
+                    hash_mode_menu()
+                else:    
+                    return (HASH_TYPE)
+            elif HM_ANSWER == "x": #Return to the Crack Menu
                 crack_menu()
             else:
                 raw_input("You did not give a valid answer, press any key to try again \n")
@@ -240,18 +254,6 @@ def rule_set_walk():
         os.system('clear')
     else:
         os.system('clear')
-
-#File Unique menu
-#Used to remove any duplicate entries in files
-#also helps to keep down the .format3 file
-def file_unique_menu():
-    lines_seen = set() # holds lines already seen
-    outfile = open("out.txt", "w")
-    for line in open("input.txt", "r"):
-        if line not in lines_seen: # if not a duplicate
-            outfile.write(line)
-            lines_seen.add(line)
-            outfile.close()
 
 #Rsmangler Rule Set - {5 ANY Characters RIGHT --> LEFT incremental}
 def rsmangler_rule_set():
@@ -361,8 +363,6 @@ def crack_menu_2():
         os.system('clear')
         hc = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'OneRuleToRuleThemAll.rule'), '-w', '3', '-O']
         subprocess.call(hc)
-        hc1 = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'dive.rule'), '-w', '3', '-O']
-        subprocess.call(hc1)
     if WIRELESS_BOOLEAN:
         return
     elif HM_ANSWER == '0':
@@ -378,7 +378,6 @@ def crack_menu_2():
     else:
         return
                                                                                                 
-
 #Crack_Menu 3
 def crack_menu_3():
     global HASH_PATH_AND_NAME
@@ -839,6 +838,8 @@ def rsmangler_menu():
     elif WIRELESS_BOOLEAN and not CEWL_BOOLEAN:
         SINGLE_WORDLIST = RSMANGLER_OUTPUT_DIR_AND_FIRMNAME
         os.chdir(WIRELESS_UPLOAD_DIR)
+    else:
+        pass
     os.system('clear')
     hc = ['hashcat', '-a', '0', '-m', HASH_TYPE, HASH_PATH_AND_NAME, '--potfile-path=' + os.path.join(L00T_POT_DIR, POT), SINGLE_WORDLIST, '-r', os.path.join(RULES_DIR, 'OneRuleToRuleThemAll.rule'), '-w', '3', '-O']
     subprocess.call(hc)
@@ -888,6 +889,8 @@ def cewl_menu_16():
         cewl_hash_input = HASH_INPUT + '.cewl-list.txt'
     elif WIRELESS_BOOLEAN:
         cewl_hash_input = WIRELESS_INPUT + '.cewl-list.txt'
+    else:
+        pass
     DEFAULT_CEWL_FILE_OUTPUT = os.path.join(CEWL_UPLOAD_DIR, cewl_hash_input)
     cewl = ['cewl', '--depth', '2', '--min_word_length', '5', cewl_url_input, '-v', '-w', DEFAULT_CEWL_FILE_OUTPUT]
     subprocess.call(cewl)
@@ -1097,7 +1100,6 @@ def crack_menu():
     global USER_ONLY_BOOLEAN
     global WIRELESS_BOOLEAN
     global WIRELESS_HASHES_LOADED
-    global WPA_HANDSHAKES
     os.system('clear')
     banner()
     try:
@@ -1118,7 +1120,7 @@ def crack_menu():
                 prYellow(SINGLE_HASH_ABS_PATH)
                 print" Cewl Wordlist in Use:"
                 prYellow(DEFAULT_CEWL_FILE_OUTPUT)
-            elif FILE_HASH_BOOLEAN and USER_ONLY_BOOLEAN and not CEWL_BOOLEAN: #Option 2
+            elif FILE_HASH_BOOLEAN and USER_ONLY_BOOLEAN: #Option 2
                 banner()
                 if not HASH_ABS_PATH.endswith('_users'):
                     HASH_ABS_PATH += '_users'
@@ -1178,25 +1180,9 @@ def crack_menu():
                     print'\033[34m' + ' ' + str(0) + ('%') + '\033[0m'
             elif FILE_HASH_BOOLEAN and CEWL_BOOLEAN:
                 banner() # Added after the call as still in the loop for aesthtics.
+                print""
                 print'\t\t\t\t' + '\033[40m' + '--==Multi Hash Cewl Cracking Menu==--' + '\033[0m'
-                print''
-                print" " + "Hash File Loaded:  ",
-                prYellow(HASH_USER)
-                print" " + "Hashes Loaded:     ",
-                prRed(HASHES_LOADED)
-                if os.path.exists(pot_absolute):
-                    with open(pot_absolute) as lines:
-                        hashes_cracked = len(lines.readlines())
-                        print' ' + "Hashes Cracked:    ",
-                        print' ' + '\033[92m' + str(hashes_cracked) + '\033[0m'
-                        print' ' + 'Percentage Cracked:',
-                        percent_cracked = (hashes_cracked * 100.00 / HASHES_LOADED)
-                        print' ' + '\033[34m' + str(percent_cracked) + ('%') + '\033[0m'
-                else:
-                    print' ' + "Hashes Cracked:    ",
-                    prRed("0")
-                    print' ' + 'Percentage Cracked:',
-                    print'\033[34m' + ' ' + str(0) + ('%') + '\033[0m'
+                print""
                 print""
                 print" " + "Hash file in use:"
                 prYellow(HASH_ABS_PATH)
@@ -1204,7 +1190,7 @@ def crack_menu():
                 print" " + "Amount of Cewl words written + Absolute Path: "
                 prYellow(CEWL_WORDLIST_SIZE)
             elif WIRELESS_BOOLEAN: #Option 3
-                banner() 
+                banner() # Currently display duplicates first time round, second time round it only shows one banner.. 
                 print""
                 print'\t\t\t\t\t' + '\033[40m' + '--==Multi Hash Cracking Menu==--' + '\033[0m'
                 print""
@@ -1215,13 +1201,11 @@ def crack_menu():
                 print NETWORKS_DETECTED.strip()
                 print" " + "SSID Loaded:     ",
                 print '   ' + '\033[34m' + str(ESSID[2]).strip() + '\033[0m'
-                print" " + "WPA Handshakes:     ",
-                print WPA_HANDSHAKES
                 print' Hash Status:    ',
                 POT = WIRELESS_INPUT.lower()
                 POT += '.pot'
                 pot_absolute = os.path.join(L00T_POT_DIR, POT)
-                #Clean up and any excess pot files that are 0 bytes
+                #Clean up and any excess pot files that are 0 bytes                                  
                 subprocess.check_call(['find', L00T_POT_DIR, '-type', 'f', '-size', '0b', '-delete'])
                 if os.path.exists(pot_absolute):
                     with open(pot_absolute, "r") as hashes:
@@ -1232,9 +1216,11 @@ def crack_menu():
                             print' Password:            ' + '\033[92m' + hash_column[1] + '\033[0m'
                 else:
                     prRed("   Not Yet!")
-            print''
+            else:
+                pass
+            print""
             print' ' + '\033[44m' + 'Supported - NTLM -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5' + '\033[0m'
-            print''
+            print""
             prCyan("0) A single merged list of wordlists in the public domain")
             prLightPurple("1) Common Wordlists - includes rockyou, hashkiller")
             prCyan("2) Special lists - UK and US Cities with OneRuleToRuleThemAll")
@@ -1301,15 +1287,16 @@ def single_hash_menu():
     SINGLE_HASH_BOOLEAN = True
     os.system('clear')
     banner()
-    print'\033[33m' + ' ' + 'Welcome to the Manual Hash upload Function' + '\033[0m'
+    print'\033[33m' + ' ' + '\t\tWelcome to the Manual Hash upload Function' + '\033[0m'
     print'\033[33m' + ' ' + 'Please enter your hash below as prompted, an example hash is shown.' + '\033[0m'
     print''
     print' ' + '\033[44m' + 'Supported - NTLM -> NetNTLMv1 -> NetNTLMv2 -> MD5 -> SHA-512 -> RC4-HMAC-MD5' + '\033[0m'
     print''
     print'\033[34m' + ' ' + 'Example NetNTLMv2 Hash - (Password = "hashcat")' + '\033[0m'
-    print' ' + 'admin::N46iSNekpT:08ca45b7d7ea58ee:88dcbe4446168966a153a0064958dac6:5c7830315c7830310000000000000b45c67103d07d7b95acd12ffa11230e0000000052920b85f78d013c31cdb3b92f5d765c783030'
+    print' ' + 'admin::N46iSNekpT:08ca45b7d7ea58ee:88dcbe4446168966a153a0064958dac6:5c7830315c78303'
+    print' ' + '10000000000000b45c67103d07d7b95acd12ffa11230e0000000052920b85f78d013c31cdb3b92f3030'
     print''
-    single_hash = raw_input(' Input your hash or type ' +  '\033[31m' + '"back"' + '\033[0m' + ' to go back to the main menu' + '\n' + ' ')
+    single_hash = raw_input(' Input your hash or type ' +  '\033[31m' + '"back"' + '\033[0m' + ' to go back to the main menu' + '\n\n' + ' ')
     if single_hash == "back" or single_hash == "Back" or single_hash == "BACK":
         main_menu()
     else:
@@ -1391,12 +1378,14 @@ def hash_from_file():
                             with open(HASH_USERS_ONLY) as lines:
                                 HASHES_LOADED = len(lines.readlines())
         else:
-            print' ' + 'Error:' + ' ' + HASH_INPUT + ' ' + 'file not found' + ' ' + 'try again or type ' + '\033[31m' + '"back"' + '\033[0m' 
+            print' ' + 'Error:' + ' ' + HASH_INPUT + ' ' + 'file not found' + ' ' + 'try again or type ' + '\033[31m' + 'back' + '\033[0m' 
             time.sleep(1)
             os.system('clear')
             hash_from_file()
     except KeyError:
         os.system('clear')
+        pass
+    else:
         pass
     os.system('clear')
     crack_menu()
@@ -1410,7 +1399,6 @@ def wireless_menu():
     global WIRELESS_BOOLEAN
     global WIRELESS_HASHES_LOADED
     global WIRELESS_INPUT
-    global WPA_HANDSHAKES
     WIRELESS_BOOLEAN = True
     banner()
     print"Select the capture file from the capture_upload directory\n"
@@ -1452,9 +1440,6 @@ def wireless_menu():
                     print NETWORKS_DETECTED
                     ESSID = a[2].split('=')
                     print ESSID[2]
-                    WPA_HANDSHAKES = a[8]
-                    WPA_HANDSHAKES = str(WPA_HANDSHAKES).strip(' ')[8]
-                    print WPA_HANDSHAKES
                 else:
                     print p.returncode
                     print 'File corrupted - (Invalid Pcap Header) - Returning to the main menu'
@@ -1474,9 +1459,6 @@ def wireless_menu():
                     NETWORKS_DETECTED = str(NETWORKS_DETECTED).strip(' ')[19] #Extract the number of Networks detected for aesthetics for wireless_menu()
                     print NETWORKS_DETECTED
                     ESSID = a[2].split('=')
-                    WPA_HANDSHAKES = a[8]
-                    WPA_HANDSHAKES = str(WPA_HANDSHAKES).strip(' ')[8]
-                    print WPA_HANDSHAKES
                 else:
                     print p.returncode
                     print 'File corrupted - (Invalid Pcap Header) - Returning to the main menu'
@@ -1491,7 +1473,7 @@ def wireless_menu():
             os.system('clear')
             crack_menu()
         else:
-            print' ' + 'Error:' + ' ' + WIRELESS_INPUT + ' ' + 'file not found'  + ' ' + 'try again or type ' + '\033[31m' + '"back"' + ' ' + '\033[0m'
+            print' ' + 'Error:' + ' ' + WIRELESS_INPUT + ' ' + 'file not found'  + ' ' + 'try again or type' + '\033[31m' + ' ' + 'back' + ' ' + '\033[0m'
             time.sleep(2)
             os.system('clear')
             wireless_menu()
@@ -1500,7 +1482,6 @@ def wireless_menu():
         pass
     os.system('clear')
     crack_menu()
-
 
 #Report and Stats Menu
 def report_menu():
@@ -1541,6 +1522,7 @@ def report_menu():
     subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1') + ' ' + '>' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats', shell=True)
     #Step 4 - Remove the unnecessasry file as we don't need it anymore.
     subprocess.call('rm' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT + '.format1'), shell=True)
+    #(WORKS)subprocess.call(os.path.join(TOOLS_DIR, 'statsgen') + ' ' + '-q' + ' ' + os.path.join(L00T_POT_DIR, STAT_INPUT) + ' ' + '-o' + ' ' + os.path.join(STATS_DIR, STAT_INPUT) + '.stats | less', shell=True)
     os.system('clear')    
     print('Report Complete - Returning to Main Menu')
     time.sleep(2)
@@ -1605,23 +1587,29 @@ def l00t_menu_full(): #Menu 5
         for f in files:
             if f.endswith('.pot') or f.endswith('.pot.sorted'):
                 print' \t' + os.path.join(f)
+            else:
+                pass
     print''
-    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type' + ' ' + '\033[0m' + '\033[31m' + '"back"' + '\033[0m'
+    print'\033[33m' + ' ' + 'Select the filename from the above list to be analysed, or type' + '\033[0m' + '\033[31m' + ' "back" ' + '\033[0m'
     os.chdir(L00T_POT_DIR)
     readline.parse_and_bind("tab: complete")
     L00T_INPUT = raw_input(str("------> "))
     if L00T_INPUT == ('back') or L00T_INPUT == ('Back') or L00T_INPUT == ('BACK'):
         main_menu()
+    else:
+        pass
     try:
         if os.path.isfile(L00T_INPUT):
             os.system('clear')
             print'\033[33m' + ' ' + 'L00T Information' + '\033[0m'
             print''
+            wc = os.popen('wc -l ' + str(L00T_INPUT)).read()
+            wc = str(wc).split(' ')[0]
+            print' ' + '\033[34m' + 'Total Number of Passwords Found = ' + '\033[0m' + wc
             print''
-            subprocess.call('less ' + L00T_INPUT, shell=True)
-            L00T_FILE = open(L00T_INPUT, "r")                
-            l00t_contents = L00T_FILE.read()                 
-            print(l00t_contents)
+            L00T_FILE = open(L00T_INPUT, "r")
+            L00T_CONTENTS = L00T_FILE.read()
+            print(L00T_CONTENTS)
             L00T_FILE.close()
             print''
             raw_input('\033[33m' + ' ' + 'Press any key to return to the main menu (Scroll Up for previous results)\n' + '\033[0m')
@@ -1696,7 +1684,7 @@ def l00t_menu_key(): #Menu 6
     return
 
 #Hash Upload Menu - Full dump of the hashes uploaded for convenience - as a bash output with standard in from 'less'
-def hash_menu_full(): #Menu 7
+def hash_menu_full(): #Menu 7                                                                                                                 
     os.system('clear')
     banner()
     print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
@@ -1722,12 +1710,16 @@ def hash_menu_full(): #Menu 7
             print'\033[33m' + ' ' + 'Hash Information' + '\033[0m'
             print''
             print''
-            #with open(HASH_INPUT, "r") as hashes:
-            #    firstline = hashes.readline()
-            #    hash_read = csv.reader(hashes, delimiter=':')
-            #    for hash_column in hash_read:
-            #        print'\033[92m' + hash_column[0] + '\033[0m' + ':' + hash_column[2]
-            subprocess.call('cat ' + HASH_INPUT + ' | sort -u | less', shell=True)
+            wc = os.popen('wc -l ' + str(HASH_INPUT)).read()
+            wc = str(wc).split(' ')[0]
+            print' ' + '\033[34m' + 'Total Number of Passwords Found = ' + '\033[0m' + wc
+            print''
+            HASH_FILE = open(HASH_INPUT, "r")
+            HASH_CONTENTS = HASH_FILE.read()
+            print(HASH_CONTENTS)
+            HASH_FILE.close()
+            print''
+            #subprocess.call('cat ' + HASH_INPUT + ' | sort -u | less', shell=True)
             print''
             raw_input('\033[33m' + ' ' + 'Press any key to return to the main menu (Scroll Up for previous results)\n' + '\033[0m')
             main_menu()
@@ -1740,7 +1732,7 @@ def hash_menu_full(): #Menu 7
         os.system('clear')
         pass
     return
-                                                         
+
 #Exit system
 def program_exit():
     sys.exit()
