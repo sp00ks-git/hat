@@ -2,7 +2,9 @@
 An automated Hashcat tool for common wordlists and rules to speed up the process of cracking hashes during engagements.
 HAT is simply a wrapper for Hashcat (with a few extra features) - https://hashcat.net, however I take no credit for that superb tool.
 
-***Linux support only***  
+Walkthrough of features - https://sp00ks-git.github.io/posts/HAT-Features/
+
+***This version is for Linux only - see the Windows Repo***  
 
 Supported Hashes:
 
