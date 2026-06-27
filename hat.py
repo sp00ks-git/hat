@@ -1628,7 +1628,7 @@ def report_menu():
     print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
     prCyan(L00T_POT_DIR)
     print""
-    print'\033[34m' + ' ' + 'Below are the stats files created from sucessfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    print'\033[34m' + ' ' + 'Below are the stats files created from successfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
     print''
     for root, dirs, files in os.walk(L00T_POT_DIR):
         files.sort()
@@ -1672,7 +1672,7 @@ def hash_menu_full():
     print'\033[33m' + ' ' + 'Hash Upload Menu' + '\033[0m'
     prCyan(HASH_UPLOAD_DIR)
     print""
-    print'\033[34m' + ' ' + 'Below are the stats files created from sucessfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    print'\033[34m' + ' ' + 'Below are the stats files created from successfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
     print''
     for root, dirs, files in os.walk(HASH_UPLOAD_DIR):
         files.sort()
@@ -1717,7 +1717,7 @@ def l00t_menu_full(): #Menu 5
     print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
     prCyan(L00T_POT_DIR)
     print""
-    print'\033[34m' + ' ' + 'Below are the stats files created from sucessfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    print'\033[34m' + ' ' + 'Below are the stats files created from successfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
     print''
     for root, dirs, files in os.walk(L00T_POT_DIR):
         files.sort()
@@ -1768,7 +1768,7 @@ def l00t_menu_key(): #Menu 6
     print'\033[33m' + ' ' + 'Reporting and Analysis Menu' + '\033[0m'
     prCyan(L00T_POT_DIR)
     print""
-    print'\033[34m' + ' ' + 'Below are the stats files created from sucessfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
+    print'\033[34m' + ' ' + 'Below are the stats files created from successfully compromised passwords... (Hit Enter to Refresh) (TAB Completion On)' + '\033[0m'
     print''
     for root, dirs, files in os.walk(L00T_POT_DIR):
         files.sort()
