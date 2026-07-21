@@ -91,7 +91,7 @@ AWK = " " + "awk '!x[$0]++'" + " "
 HM_ANSWER = "999"
 
 #Declare Paths
-#First make the hat absolute path dynamic and go up one level to accomodate each related path
+#First make the hat absolute path dynamic and go up one level to accommodate each related path
 HASHCAT_PATH = os.getcwd()
 
 #Set the wordlist directory to where you're wordlists are...
