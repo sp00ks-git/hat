@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Map My Route</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="app-header">
+  <div class="brand">
+    <span class="brand-mark">&#128506;</span>
+    <span class="brand-name">Map My Route</span>
+  </div>
+
+  <div class="mode-toggle" role="tablist" aria-label="View mode">
+    <button id="mode-globe" class="mode-btn active" role="tab" aria-selected="true">Globe</button>
+    <button id="mode-planner" class="mode-btn" role="tab" aria-selected="false">Route Planner</button>
+  </div>
+
+  <button id="settings-btn" class="icon-btn" title="Settings (API key)">&#9881;&#65039; Settings</button>
+</header>
+
+<main class="app-main">
+
+  <!-- GLOBE VIEW -->
+  <section id="view-globe" class="view active">
+    <div id="globe-map" class="full-map"></div>
+    <div class="globe-hint">
+      Drag to spin the globe, scroll to zoom. Free and open &mdash; no API key, no Google.
+    </div>
+    <button id="use-here-btn" class="primary-btn floating-btn">Plan a route from here &rarr;</button>
+  </section>
+
+  <!-- PLANNER VIEW -->
+  <section id="view-planner" class="view">
+    <div class="planner-layout">
+      <div id="planner-map" class="planner-map"></div>
+
+      <aside class="sidebar">
+        <div class="sidebar-block">
+          <h2>Route</h2>
+          <label class="field-label" for="profile-select">Travel mode</label>
+          <select id="profile-select">
+            <option value="driving-car">Driving</option>
+            <option value="foot-walking">Walking</option>
+            <option value="foot-hiking">Hiking</option>
+            <option value="cycling-regular">Cycling</option>
+          </select>
+
+          <p class="hint" id="profile-hint"></p>
+
+          <div class="button-row">
+            <button id="undo-point-btn" class="secondary-btn" disabled>Undo point</button>
+            <button id="clear-route-btn" class="secondary-btn" disabled>Clear</button>
+          </div>
+          <p class="tiny-hint">Click the map to place a start point, then keep clicking to route from A to B (and beyond) &mdash; the line locks to the nearest road or path.</p>
+        </div>
+
+        <div class="sidebar-block" id="stats-block" hidden>
+          <h2>Route stats</h2>
+          <div class="stat-row">
+            <span class="stat-label">Distance</span>
+            <span id="stat-distance" class="stat-value">&mdash;</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Est. time</span>
+            <span id="stat-duration" class="stat-value">&mdash;</span>
+          </div>
+          <div class="stat-row" id="stat-elevation-row" hidden>
+            <span class="stat-label">Elevation</span>
+            <span id="stat-elevation" class="stat-value">&mdash;</span>
+          </div>
+
+          <h3>Surface breakdown</h3>
+          <ul id="waytype-breakdown" class="breakdown-list"></ul>
+        </div>
+
+        <div class="sidebar-block" id="actions-block" hidden>
+          <h2>Share this route</h2>
+          <div class="button-row wrap">
+            <button id="screenshot-btn" class="secondary-btn">&#128247; Screenshot</button>
+            <button id="gpx-btn" class="secondary-btn">&#11015;&#65039; Export GPX</button>
+            <button id="streetview-btn" class="secondary-btn">&#128694; Street-level view</button>
+          </div>
+          <label class="field-label" for="share-link">Shareable link</label>
+          <div class="share-row">
+            <input id="share-link" type="text" readonly />
+            <button id="copy-link-btn" class="secondary-btn">Copy</button>
+          </div>
+          <button id="shorten-btn" class="link-btn">Try to shorten this link</button>
+          <p id="share-status" class="tiny-hint"></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+</main>
+
+<!-- SETTINGS MODAL -->
+<div id="settings-modal" class="modal-backdrop" hidden>
+  <div class="modal">
+    <h2>Settings</h2>
+    <p>
+      Driving directions work out of the box using the free
+      <a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM demo server</a>.
+      To unlock <strong>walking, hiking and cycling</strong> routes plus automatic
+      road / track / footpath / cycleway coloring, add a free
+      <a href="https://openrouteservice.org/dev/#/signup" target="_blank" rel="noopener">openrouteservice</a>
+      API key (free tier, no credit card).
+    </p>
+    <label class="field-label" for="ors-key-input">openrouteservice API key</label>
+    <input id="ors-key-input" type="text" placeholder="Paste your free ORS API key here" />
+    <p class="tiny-hint">Stored only in this browser (localStorage). Never sent anywhere except openrouteservice.org.</p>
+    <div class="button-row">
+      <button id="save-key-btn" class="primary-btn">Save</button>
+      <button id="close-settings-btn" class="secondary-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
