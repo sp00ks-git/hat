@@ -16,7 +16,7 @@
 
 import { OSRM_DEMO_URL, ORS_BASE_URL, WAYTYPE_STYLES, DEFAULT_ROUTE_COLOR } from "./config.js";
 
-function haversineM(a, b) {
+export function haversineM(a, b) {
   const R = 6371000;
   const toRad = (d) => (d * Math.PI) / 180;
   const dLat = toRad(b[0] - a[0]);

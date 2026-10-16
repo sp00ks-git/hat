@@ -288,3 +288,23 @@ select, input[type="text"] {
     border-top: 1px solid var(--border);
   }
 }
+
+.draw-toggle {
+  width: 34px;
+  height: 34px;
+  margin: 0 10px 6px 0;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  background: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.draw-toggle.active {
+  background: #ec4899;
+  border-color: #be185d;
+}
+.leaflet-container.draw-mode,
+.leaflet-container.draw-mode .leaflet-interactive {
+  cursor: crosshair !important;
+}
